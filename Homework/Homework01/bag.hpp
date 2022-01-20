@@ -4,6 +4,8 @@
 #include <cstdlib>
 
 template<typename T> class Bag{
+private:
+  std::vector<T> items;
 public:
 
   Bag();

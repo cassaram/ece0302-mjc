@@ -15,6 +15,15 @@ TEST_CASE("Define Test", "[Bag]"){
   REQUIRE(b.isEmpty() == true);
 }
 
+TEST_CASE("Size Test", "[Bag]"){
+  Bag <double> b = Bag<double>();
+  b.add(1);
+  b.add(2.5);
+  b.add(3);
+  b.add(3.25);
+  REQUIRE(b.getCurrentSize() == 4);
+}
+
 TEST_CASE("Add Test", "[Bag]"){
   Bag<double> b = Bag<double>();
   REQUIRE(b.isEmpty() == true);
