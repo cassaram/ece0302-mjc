@@ -5,21 +5,15 @@
 Bitset::Bitset() {
     // Define & set global variables
     N = 8;
-    data = new bool[8];
+    data = new u_int8_t[8];
     isGood = true;
-
-    // Set data array
-    for (unsigned i = 0; i < N; i++)
-    {
-        data[i] = false;
-    }
 }
 
 // Constructor with specified size: N = size, Data = all 0's.
 Bitset::Bitset(intmax_t size) {
     // Define & set global variables
     N = size;
-    data = new bool[N];
+    data = new u_int8_t[N];
     isGood = true;
 
     // Check if size is > 0
@@ -28,9 +22,9 @@ Bitset::Bitset(intmax_t size) {
     }
 
     // Set the data array
-    for (unsigned i = 0; i < N; i++)
+    for (intmax_t i = 0; i < N; i++)
     {
-        data[i] = false;
+        data[i] = 0;
     }
 }
 
@@ -38,16 +32,16 @@ Bitset::Bitset(intmax_t size) {
 Bitset::Bitset(const std::string & value) {
     // Define & set global variables
     N = value.length();
-    data = new bool[N];
+    data = new u_int8_t[N];
     isGood = true;
 
     // Set the data array
-    for (unsigned i = 0; i < N; i++)
+    for (intmax_t i = 0; i < N; i++)
     {
         if (value.at(i) == '0') {
-            data[i] = false;
+            data[i] = 0;
         } else if (value.at(i) == '1') {
-            data[i] = true;
+            data[i] = 1;
         } else {
             isGood = false;
         }
@@ -56,18 +50,16 @@ Bitset::Bitset(const std::string & value) {
 
 // Default Destructor
 Bitset::~Bitset() {
-    delete N;
     delete[] data;
-    delete isGood;
 }
 
 // Accessor for size of bitset.
-intmax_t Bitset::size() {
+intmax_t Bitset::size() const {
     return N;
 }
 
 // Method to determine if bitset is valid.
-bool Bitset::good() {
+bool Bitset::good() const {
     return isGood;
 }
 
@@ -76,7 +68,7 @@ void Bitset::set(intmax_t index) {
     // Ensure index is in range [0, N-1]
     if (index >= 0 && index < N) {
         // Set bit
-        data[index] = true;
+        data[index] = 1;
     } else {
         isGood = false;
     }
@@ -87,7 +79,7 @@ void Bitset::reset(intmax_t index) {
     // Ensure index is in range [0, N-1]
     if (index >= 0 && index < N) {
         // Reset bit
-        data[index] = false;
+        data[index] = 0;
     } else {
         isGood = false;
     }
@@ -109,7 +101,7 @@ bool Bitset::test(intmax_t index) {
     // Ensure index is in range [0, N-1]
     if (index >= 0 && index < N) {
         // Return true / false if data is a 1
-        return data[index];
+        return (data[index] == 1);
     } else {
         // Invalidate bitset and return false
         isGood = false;
@@ -118,13 +110,13 @@ bool Bitset::test(intmax_t index) {
 }
 
 // Method to return string format of the bitset.
-std::string Bitset::asString() {
+std::string Bitset::asString() const {
     // Define Result
     std::string result = "";
 
     // Create result string
-    for (unsigned i = 0; i < N; i++) {
-        if (data[i]) {
+    for (intmax_t i = 0; i < N; i++) {
+        if (data[i] == 1) {
             // Set bit, add 1
             result.push_back('1');
         } else {

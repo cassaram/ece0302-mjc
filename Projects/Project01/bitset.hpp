@@ -44,7 +44,7 @@ public:
 private:
     intmax_t N;  // Var to store the size of the bitset
     bool isGood; // Var to store if the bitset is valid
-    bool *data;  // Pointer to store the data of the bitset as an array
+    u_int8_t* data;  // Pointer to store the data of the bitset as an array
 };
 
 #endif

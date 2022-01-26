@@ -1,5 +1,4 @@
 #define CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_COLOUR_NONE
 #include "catch.hpp"
 
 #include "bitset.hpp"
@@ -7,20 +6,19 @@
 // THIS IS JUST AN EXAMPLE
 // There should be at least one test per Bitset method
 
-TEST_CASE( "Test bitset construction", "[bitset]" ) {
-
+TEST_CASE("Test bitset construction", "[bitset]") {
     Bitset b;
     REQUIRE(b.size() == 8);
     REQUIRE(b.good());
 }
 
-TEST_CASE( "Test bitset size constructor", "[bitset]" ) {
+TEST_CASE("Test bitset size constructor", "[bitset]") {
     Bitset b(12);
     REQUIRE(b.size() == 12);
     REQUIRE(b.good());
 }
 
-TEST_CASE( "Test bitset string constructor", "[bitset]" ) {
+TEST_CASE("Test bitset string constructor", "[bitset]") {
     std::string str = "01010111";
     Bitset b(str);
     REQUIRE(b.size() == 8);
@@ -28,28 +26,12 @@ TEST_CASE( "Test bitset string constructor", "[bitset]" ) {
     REQUIRE(b.asString() == str);
 }
 
-TEST_CASE ( "Test bitset copy constructor", "[bitset]" ) {
-    Bitset b1("0111001");
-    Bitset b2(b1);
-    REQUIRE(b1.asString() == b2.asString());
-    REQUIRE(b1.good() == b2.good());
-    REQUIRE(b1.size() == b2.size());
-}
-
-TEST_CASE ( "Test bitset copy operator", "[bitset]" ) {
-    Bitset b1;
-    Bitset b2 = b1;
-    REQUIRE(b1.asString() == b2.asString());
-    REQUIRE(b1.good() == b2.good());
-    REQUIRE(b1.size() == b2.size());
-}
-
-TEST_CASE ( "Test size method", "[bitset]" ) {
+TEST_CASE ("Test size method", "[bitset]") {
     Bitset b(23);
     REQUIRE(b.size() == 23);
 }
 
-TEST_CASE ( "Test validity method", "[bitset]" ) {
+TEST_CASE ("Test validity method", "[bitset]") {
     Bitset b1;
     Bitset b2(8);
     Bitset b3("1001");
