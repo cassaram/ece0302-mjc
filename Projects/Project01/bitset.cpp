@@ -1,19 +1,25 @@
 #include "bitset.hpp"
 
-// TODO
 // Default Constructor: N = 8, Data = all 0's.
 Bitset::Bitset() {
-    // Define & set global variables
     N = 8;
-    data = new u_int8_t[8];
+    // Calculate the size of the needed array length (integer division w/ rounding up)
+    intmax_t arraySize = 1 + ((N - 1) / 8);
+    data = new u_int8_t[arraySize];
     isGood = true;
+
+    // Fill array
+    for (int i = 0; i < N; i++) {
+        reset(i);
+    }
 }
 
 // Constructor with specified size: N = size, Data = all 0's.
 Bitset::Bitset(intmax_t size) {
-    // Define & set global variables
     N = size;
-    data = new u_int8_t[N];
+    // Calculate the size of the needed array length (integer division w/ rounding up)
+    intmax_t arraySize = 1 + ((N - 1) / 8);
+    data = new u_int8_t[arraySize];
     isGood = true;
 
     // Check if size is > 0
@@ -21,27 +27,27 @@ Bitset::Bitset(intmax_t size) {
         isGood = false;
     }
 
-    // Set the data array
-    for (intmax_t i = 0; i < N; i++)
-    {
-        data[i] = 0;
+    // Fill array
+    for (int i = 0; i < N; i++) {
+        reset(i);
     }
 }
 
 // Constructor with specified string of 0's and 1's.
 Bitset::Bitset(const std::string & value) {
-    // Define & set global variables
     N = value.length();
-    data = new u_int8_t[N];
+    // Calculate the size of the needed array length (integer division w/ rounding up)
+    intmax_t arraySize = 1 + ((N - 1) / 8);
+    data = new u_int8_t[arraySize];
     isGood = true;
 
     // Set the data array
     for (intmax_t i = 0; i < N; i++)
     {
-        if (value.at(i) == '0') {
-            data[i] = 0;
-        } else if (value.at(i) == '1') {
-            data[i] = 1;
+        if (value.at(i) == '1') {
+            set(i);
+        } else if (value.at(i) == '0') {
+            reset(i);
         } else {
             isGood = false;
         }
@@ -65,10 +71,13 @@ bool Bitset::good() const {
 
 // Method to set a specific bit to a 1.
 void Bitset::set(intmax_t index) {
+    int arr = index / 8;
+    int arrIndex = index - (arr * 8);
+
     // Ensure index is in range [0, N-1]
     if (index >= 0 && index < N) {
         // Set bit
-        data[index] = 1;
+        data[arr] |= 1UL << arrIndex;
     } else {
         isGood = false;
     }
@@ -76,10 +85,13 @@ void Bitset::set(intmax_t index) {
 
 // Method to set a specific bit to a 0.
 void Bitset::reset(intmax_t index) {
+    int arr = index / 8;
+    int arrIndex = index - (arr * 8);
+
     // Ensure index is in range [0, N-1]
     if (index >= 0 && index < N) {
         // Reset bit
-        data[index] = 0;
+        data[arr] &= ~(1UL << arrIndex);
     } else {
         isGood = false;
     }
@@ -87,10 +99,13 @@ void Bitset::reset(intmax_t index) {
 
 // Method to toggle a specific bit between 0 and 1.
 void Bitset::toggle(intmax_t index) {
+    int arr = index / 8;
+    int arrIndex = index - (arr * 8);
+
     // Ensure index is in range [0, N-1]
     if (index >= 0 && index < N) {
         // Flip bit
-        data[index] = !data[index];
+        data[arr] ^= 1UL << arrIndex;
     } else {
         isGood = false;
     }
@@ -98,10 +113,13 @@ void Bitset::toggle(intmax_t index) {
 
 // Accessor to determine if a specific bit is a 1.
 bool Bitset::test(intmax_t index) {
+    int arr = index / 8;
+    int arrIndex = index - (arr * 8);
+
     // Ensure index is in range [0, N-1]
     if (index >= 0 && index < N) {
         // Return true / false if data is a 1
-        return (data[index] == 1);
+        return ((data[arr] >> arrIndex) & 1U == 1);
     } else {
         // Invalidate bitset and return false
         isGood = false;
@@ -116,11 +134,12 @@ std::string Bitset::asString() const {
 
     // Create result string
     for (intmax_t i = 0; i < N; i++) {
-        if (data[i] == 1) {
-            // Set bit, add 1
+        int arr = i / 8;
+        int arrIndex = i - (arr * 8);
+
+        if ((data[arr] >> arrIndex) & 1U == 1) {
             result.push_back('1');
         } else {
-            // Unset bit, add 0
             result.push_back('0');
         }
     }

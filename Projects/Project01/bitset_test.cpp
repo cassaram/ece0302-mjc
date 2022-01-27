@@ -45,13 +45,22 @@ TEST_CASE ("Test validity method", "[bitset]") {
 }
 
 TEST_CASE("Test set method", "[bitset]") {
-    Bitset b;
-    b.set(0);
-    b.set(3);
-    REQUIRE(b.good());
-    REQUIRE(b.asString() == "10010000");
-    b.set(8);
-    REQUIRE(!b.good());
+    Bitset b1;
+    b1.set(0);
+    b1.set(3);
+    REQUIRE(b1.good());
+    REQUIRE(b1.asString() == "10010000");
+    b1.set(8);
+    REQUIRE(!b1.good());
+
+    Bitset b2(12);
+    b2.set(0);
+    b2.set(10);
+    b2.set(11);
+    REQUIRE(b2.asString() == "100000000011");
+    REQUIRE(b2.good());
+    b2.set(12);
+    REQUIRE(!b2.good());
 }
 
 TEST_CASE("Test reset method", "[bitset]") {
@@ -97,15 +106,15 @@ TEST_CASE("Test test method", "[bitset]") {
 }
 
 TEST_CASE("Test asString method", "[bitset]") {
-    std::string str1 = "10101010";
+    std::string str1 = "10011001";
     Bitset b1(str1);
-    Bitset b2;
+    Bitset b2(10);
     b2.set(0);
     b2.set(3);
     b2.set(4);
     b2.set(7);
     REQUIRE(b1.asString() == str1);
-    REQUIRE(b2.asString() == "10011001");
+    REQUIRE(b2.asString() == "1001100100");
     REQUIRE(b1.good());
     REQUIRE(b2.good());
 }
