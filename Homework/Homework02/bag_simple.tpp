@@ -20,7 +20,7 @@ template <typename T> bool Bag<T>::add(const T& entry) {
 
   data[size] = entry;
   ++size;
-  
+
   return true;
 }
 
@@ -54,7 +54,7 @@ template <typename T> std::size_t Bag<T>::getFrequencyOf(const T& entry) const {
   for(std::size_t i = 0; i < size; ++i){
     if(data[i] == entry) ++freq;
   }
-  
+
   return freq;
 }
 

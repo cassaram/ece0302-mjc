@@ -3,11 +3,11 @@
 
 #include "abstract_bag.hpp"
 
-template<typename T> class Bag{
+template<typename T> class Bag: public AbstractBag {
 public:
 
   Bag();
-  
+
   ~Bag();
 
   std::size_t getCurrentSize() const;
@@ -25,11 +25,11 @@ public:
   bool contains(const T& entry) const;
 
   static const std::size_t MAXSIZE = 100;
-  
+
 private:
   // implementation using fixed automatic storage
   std::size_t size;
-  
+
   T data[MAXSIZE];
 };
 
