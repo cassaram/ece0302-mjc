@@ -9,19 +9,19 @@ class LimitedSizeBag: public AbstractBag<T>
 public:
   // default constructor
   LimitedSizeBag();
-  
+
   // copy constructor
   LimitedSizeBag(const LimitedSizeBag& x);
-    
+
   // destructor
   ~LimitedSizeBag();
-  
+
   // copy assignment
   LimitedSizeBag& operator=(LimitedSizeBag& x);
 
   // add an item to the bag
   bool add(const T & item);
-  
+
   // remove an item
   bool remove(const T & item);
 
@@ -41,7 +41,9 @@ public:
   bool contains(const T& item) const;
 
 private:
-
+    const std::size_t MAXSIZE = 5;
+    std::size_t size;
+    T* data;
   // TODO
 };
 
