@@ -10,16 +10,20 @@
  */
 int fancyPower(int n, int m)
 {
-	// Check if power is 1
-	if (m == 1) {
+	// Check if power is 0
+	if (m == 0) {
+		return 1;
+	} else if (m == 1) {
 		return n;
+	} else if (m == 2) {
+		return (n * n);
 	} else {
 		if (m % 2 == 0) {
 			// Even Power
-			return fancyPower(n*n, n/2);
+			return fancyPower(fancyPower(n, 2), (m/2));
 		} else {
 			// Odd Power
-			return fancyPower(n*n, (n-1)/2);
+			return (n * fancyPower(fancyPower(n, 2), ((m-1)/2)));
 		}
 	}
 	return 0;
