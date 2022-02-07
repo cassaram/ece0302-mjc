@@ -17,10 +17,10 @@ TEST_CASE("Copy Constructor Test", "[DynamicBag]") {
     b1.add(12);
     b1.add(4);
     DynamicBag<int> b2(b1);
-    REQUIRE(!b1.isEmpty());
-    REQUIRE(b1.contains(12));
-    REQUIRE(b1.contains(4));
-    REQUIRE(!b1.contains(5));
+    REQUIRE(!b2.isEmpty());
+    REQUIRE(b2.contains(12));
+    REQUIRE(b2.contains(4));
+    REQUIRE(!b2.contains(5));
 }
 
 TEST_CASE("Copy Assignment Test", "[DynamicBag]") {
@@ -30,10 +30,10 @@ TEST_CASE("Copy Assignment Test", "[DynamicBag]") {
     b1.add(4);
     DynamicBag <int> b2;
     b2 = b1;
-    REQUIRE(!b1.isEmpty());
-    REQUIRE(b1.contains(12));
-    REQUIRE(b1.contains(4));
-    REQUIRE(!b1.contains(5));
+    REQUIRE(!b2.isEmpty());
+    REQUIRE(b2.contains(12));
+    REQUIRE(b2.contains(4));
+    REQUIRE(!b2.contains(5));
 }
 
 TEST_CASE("Add Method Test", "[DynamicBag]") {
