@@ -9,19 +9,19 @@ class DynamicBag: public AbstractBag<T>
 public:
   // default constructor
   DynamicBag();
-  
+
   // copy constructor
   DynamicBag(const DynamicBag& x);
-    
+
   // destructor
   ~DynamicBag();
-  
+
   // copy assignment
   DynamicBag& operator=(DynamicBag& x);
 
   // add an item to the bag
   bool add(const T & item);
-  
+
   // remove an item
   bool remove(const T & item);
 
@@ -41,8 +41,8 @@ public:
   bool contains(const T& item) const;
 
 private:
-
-  // TODO
+    std::size_t size;
+    T* data;
 };
 
 #include "dynamic_bag.tpp"
