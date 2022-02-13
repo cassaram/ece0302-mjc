@@ -19,13 +19,13 @@ public:
 
   // copy assignment
   ArrayList & operator=(const ArrayList & rhs);
-  
+
   // determine if a list is empty
   bool isEmpty() const;
 
   // return current length of the list
   std::size_t getLength() const;
-  
+
   // insert item at position in the list using 1-based indexing
   bool insert(std::size_t position, const T& item);
 
@@ -42,9 +42,8 @@ public:
   void setEntry(std::size_t position, const T& newValue);
 
 private:
-
-  // TODO
-  
+    std::size_t length;
+    T* array;
 };
 
 #include "array_list.tpp"
