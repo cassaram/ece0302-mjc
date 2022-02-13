@@ -4,6 +4,7 @@ template <typename T>
 ArrayList<T>::ArrayList() {
     // Initialize empty dynamic array
     length = 0;
+    array = nullptr;
 }
 
 template <typename T>
@@ -102,7 +103,7 @@ bool ArrayList<T>::remove(std::size_t position) {
 
     // Copy existing elements from old array to new array, without element at position
     std::size_t j = 0;
-    for (std::size_t i = 0; i < length; i++) {
+    for (std::size_t i = 0; i <= length; i++) {
         if (i == index) {
             // Skip item
         } else {
@@ -124,6 +125,7 @@ void ArrayList<T>::clear() {
     // Clear all items from array
     length = 0;
     delete[] array;
+    array = nullptr;
 }
 
 template <typename T>
