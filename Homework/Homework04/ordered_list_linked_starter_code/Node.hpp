@@ -7,7 +7,7 @@ class Node
 private:
    ItemType        item; // A data item
    Node<ItemType>* next; // Pointer to next node
-   
+
 public:
    Node();
    Node(const ItemType& anItem);

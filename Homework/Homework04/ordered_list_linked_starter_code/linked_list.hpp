@@ -8,22 +8,22 @@ template <typename T>
 class LinkedList: public AbstractList<T>
 {
 public:
-  
+
   // default constructor
   LinkedList();
-  
+
   // copy constructor
   LinkedList(const LinkedList& x);
-    
+
   // destructor
   ~LinkedList();
-  
+
   // copy assignment
   LinkedList& operator=(const LinkedList& x);
 
-  // swap two lists 
+  // swap two lists
   void swap(LinkedList& x, LinkedList& y);
-  
+
   // determine if a list is empty
   bool isEmpty() const;
 
@@ -46,9 +46,9 @@ public:
   void setEntry(std::size_t position, const T& newValue);
 
 private:
-
-  //TODO
-  
+    std::size_t length;
+    Node<T>* firstNode;
+    Node<T>* lastNode;
 };
 
 #include "linked_list.tpp"
