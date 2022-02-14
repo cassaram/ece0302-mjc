@@ -131,7 +131,7 @@ TEST_CASE("Clear Method", "[ArrayList]") {
     REQUIRE(l1.getEntry(3) == 2);
     REQUIRE(l1.getEntry(4) == 3);
     REQUIRE(l1.getEntry(5) == 4);
-    REQUIRE(l1.clear());
+    l1.clear();
     REQUIRE(l1.getLength() == 0);
     REQUIRE(l1.isEmpty());
 }
