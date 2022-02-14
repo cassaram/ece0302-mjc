@@ -77,10 +77,8 @@ TEST_CASE("isEmpty Method", "[LinkedList]") {
 TEST_CASE("getLength Method", "[LinkedList]") {
     LinkedList<int> l1;
     REQUIRE(l1.getLength() == 0);
-    REQUIRE(l1.isEmpty());
     REQUIRE(l1.insert(1, 3));
     REQUIRE(l1.getLength() == 1);
-    REQUIRE(!l1.isEmpty());
     REQUIRE(l1.insert(2, 15));
     REQUIRE(l1.getLength() == 2);
     REQUIRE(l1.remove(1));
@@ -155,7 +153,7 @@ TEST_CASE("getEntry Method", "[LinkedList]") {
     REQUIRE(l1.getEntry(1) == 3);
     REQUIRE(l1.getEntry(2) == 5);
     REQUIRE(l1.getEntry(3) == 15);
-    REQUIRE(l1.getLength() == 2);
+    REQUIRE(l1.getLength() == 3);
     l1.clear();
     REQUIRE(l1.getLength() == 0);
     REQUIRE(l1.isEmpty());
@@ -184,7 +182,7 @@ TEST_CASE("setEntry Method", "[LinkedList]") {
     REQUIRE(l1.getEntry(1) == 1);
     REQUIRE(l1.getEntry(2) == 5);
     REQUIRE(l1.getEntry(3) == -12);
-    REQUIRE(l1.getLength() == 2);
+    REQUIRE(l1.getLength() == 3);
     l1.clear();
     REQUIRE(l1.getLength() == 0);
     REQUIRE(l1.isEmpty());

@@ -11,16 +11,19 @@ LinkedList<T>::LinkedList()
 template <typename T>
 LinkedList<T>::~LinkedList()
 {
-    // Dereference
+    // Loop through list, deleting nodes
+    Node<T>* next = firstNode;
     Node<T>* current = firstNode;
-    Node<T>* next = NULL;
-
-    while (current != NULL)
-    {
-        next = current->getNext();
-        free(current);
+    while (length > 0) {
         current = next;
+        next = current->getNext();
+        delete current;
+        length--;
     }
+
+    // Remove pointers
+    firstNode = NULL;
+    lastNode = NULL;
 }
 
 template <typename T>
@@ -43,12 +46,12 @@ LinkedList<T>::LinkedList(const LinkedList<T>& x)
     while (current != NULL) {
         // Ensure we set up first node
         if (firstNode == NULL) {
-            firstNode = &(new Node<T>(current->getItem(), NULL));
+            firstNode = new Node<T>(current->getItem(), NULL);
             lastNode = firstNode;
         } else {
             // Copy node to end of current list
-            tail->setNext(&(new Node<T>(current->getItem(), NULL)));
-            tail = tail->getNext();
+            lastNode->setNext(new Node<T>(current->getItem(), NULL));
+            lastNode = lastNode->getNext();
         }
 
         // Get next node to iterate over
@@ -68,8 +71,8 @@ void LinkedList<T>::swap(LinkedList<T>& x, LinkedList<T>& y)
     // Set first / last nodes of both lists
     x.firstNode = y_first;
     x.lastNode = y_last;
-    y.firstNode = y_first;
-    y.lastNode = y_last;
+    y.firstNode = x_first;
+    y.lastNode = x_last;
 }
 
 template <typename T>
@@ -80,7 +83,7 @@ LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& x)
 
     // Ensure list contains at least 1 good node
     if (x.firstNode == nullptr) {
-        return;
+        return *this;
     }
 
     // Setup iterative pointers
@@ -92,12 +95,12 @@ LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& x)
     while (current != NULL) {
         // Ensure we set up first node
         if (firstNode == NULL) {
-            firstNode = &(new Node<T>(current->getItem(), NULL));
+            firstNode = new Node<T>(current->getItem(), NULL);
             lastNode = firstNode;
         } else {
             // Copy node to end of current list
-            tail->setNext(&(new Node<T>(current->getItem(), NULL)));
-            tail = tail->getNext();
+            lastNode->setNext(new Node<T>(current->getItem(), NULL));
+            lastNode = lastNode->getNext();
         }
 
         // Get next node to iterate over
@@ -126,21 +129,42 @@ template <typename T>
 bool LinkedList<T>::insert(std::size_t position, const T& item)
 {
     // Ensure position is in bounds
-    if (position < 1 || index > length) {
+    if (position < 1 || position > length+1) {
         return false;
     }
 
-    // Update length
-    length++;
+    // Create node
+    Node<T>* newNode = new Node<T>(item, NULL);
 
-    // Iterate to correct node
+    // Special case for first element in new array
+    if (position == 1 && length == 0) {
+        firstNode = newNode;
+        lastNode = newNode;
+        length++;
+        return true;
+    }
+
+    // Special case for last element
+    if (position == length + 1) {
+        lastNode->setNext(newNode);
+        lastNode = newNode;
+        length++;
+        return true;
+    }
+
+    // Traverse array
     Node<T>* current = firstNode;
-    for (std::size_t i = 1; i < position; i++) {
+    for (std::size_t i = 1; i < position - 1; i++) {
         current = current->getNext();
     }
 
     // Insert new node
-    current->setNext(&(new Node<T>(item, current->getNext())));
+    Node<T>* next = current->getNext();
+    newNode->setNext(next);
+    current->setNext(newNode);
+
+    // Update length
+    length++;
 
     return true;
 }
@@ -149,28 +173,48 @@ template <typename T>
 bool LinkedList<T>::remove(std::size_t position)
 {
     // Ensure position is in bounds
-    if (position < 1 || index > length) {
+    if (position < 1 || position > length+1) {
         return false;
     }
 
-    // Update length
-    length--;
-
-    // Case for removing first node
+    // Special case for first element
     if (position == 1) {
-        firstNode = firstNode->getNext();
+        Node<T>* next = firstNode->getNext();
+        delete firstNode;
+        firstNode = next;
+        length--;
         return true;
     }
 
-    // Iterate to correct node
-    Node<T>* last = firstNode;
-    Node<T>* current = firstNode->getNext();
-    for (std::size_t i = 1; i < position; i++) {
-        current = current->getNext();
+    // Special case for last element
+    if (position == length) {
+        // Traverse List
+        Node<T>* newLast = firstNode;
+        for (std::size_t i = 1; i < position - 1; i++) {
+            newLast = newLast->getNext();
+        }
+
+        // Set new last node
+        delete lastNode;
+        lastNode = newLast;
+
+        length--;
+        return true;
     }
 
-    // Remove current node
+    // Traverse array
+    Node<T>* last = firstNode;
+    for(std::size_t i = 1; i < position - 1; i++) {
+        last = last->getNext();
+    }
+
+    // Set next node
+    Node<T>* current = last->getNext();
     last->setNext(current->getNext());
+    delete current;
+
+    // Update length
+    length--;
 
     return true;
 }
@@ -178,26 +222,26 @@ bool LinkedList<T>::remove(std::size_t position)
 template <typename T>
 void LinkedList<T>::clear()
 {
-    // Dereference
+    // Loop through list, deleting nodes
+    Node<T>* next = firstNode;
     Node<T>* current = firstNode;
-    Node<T>* next = NULL;
-
-    while (current != NULL)
-    {
-        next = current->getNext();
-        free(current);
+    while (length > 0) {
         current = next;
+        next = current->getNext();
+        delete current;
+        length--;
     }
 
-    // Update length
-    length = 0;
+    // Remove pointers
+    firstNode = NULL;
+    lastNode = NULL;
 }
 
 template <typename T>
 T LinkedList<T>::getEntry(std::size_t position) const
 {
     // Ensure position is in bounds
-    if (position >= 1 && index <= length) {
+    if (position >= 1 && position <= length) {
         // Iterate to correct node
         Node<T>* current = firstNode;
         for (std::size_t i = 1; i < position; i++) {
@@ -216,7 +260,7 @@ template <typename T>
 void LinkedList<T>::setEntry(std::size_t position, const T& newValue)
 {
     // Ensure position is in bounds
-    if (position >= 1 && index <= length) {
+    if (position >= 1 && position <= length) {
         // Iterate to correct node
         Node<T>* current = firstNode;
         for (std::size_t i = 1; i < position; i++) {
