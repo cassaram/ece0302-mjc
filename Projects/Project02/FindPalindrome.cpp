@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <locale> 
+#include <locale>
 #include "FindPalindrome.hpp"
 
 using namespace std;
@@ -14,10 +14,10 @@ using namespace std;
 // helper function to convert string to lower case
 static void convertToLowerCase(string & value)
 {
-	locale loc;
-	for (int i=0; i<value.size(); i++) {
-		value[i] = tolower(value[i],loc);
-	}
+    locale loc;
+    for (int i=0; i<value.size(); i++) {
+        value[i] = tolower(value[i],loc);
+    }
 }
 
 //------------------- PRIVATE CLASS METHODS ------------------------------------
@@ -26,79 +26,301 @@ static void convertToLowerCase(string & value)
 void FindPalindrome::recursiveFindPalindromes(vector<string>
         candidateStringVector, vector<string> currentStringVector)
 {
-	// TODO need to implement this recursive function!
-	return;
+    // Lowest-level loop. currentStringVector is empty
+    if (currentStringVector.size() == 0) {
+        // String to use as a test case
+        std::string candidateString = "";
+
+        // Convert candidate palindrome to string
+        for (std::size_t i = 0; i < candidateStringVector.size(); i++) {
+            candidateString.push_back(candidateStringVector.at(i));
+        }
+
+        // Check if candidateString is a palindrome
+        if (isPalindrome(candidateString)) {
+            // String is a palindrome, add it to the list and increment the palindrome count
+            palindromesList.push_back(candidateStringVector);
+            numPalindromes++;
+        }
+
+        // Exit current recursion level
+        return;
+    }
+
+    // Ensure palindrome exists within current set
+    if (!cutTest2(candidateStringVector, currentStringVector)) {
+        // No palindromes exist
+        // Exit current recursion level
+        return;
+    }
+
+    // Palindrome(s) exist, start sub-recursive loop
+    for (std::size_t i = 0; i < currentStringVector.size(); i++) {
+        // Cache first word of current
+        std::string currentFirstCache = currentStringVector.at(i);
+
+        // Move first word from current to candidate
+        candidateStringVector.push_back(currentFirstCache);
+        currentStringVector.erase(currentStringVector.begin() + i);
+
+        // Find palindromes of current candidate
+        recursiveFindPalindromes(candidateStringVector, currentStringVector);
+
+        // Rebuild currentStringVector to how it was before this loop
+        currentStringVector.insert(currentStringVector.begin(), currentFirstCache);
+
+        // Rebuild candidateStringVector to how it was before this loop
+        candidateStringVector.erase(candidateStringVector.end());
+    }
+
+    return;
 }
 
 // private function to determine if a string is a palindrome (given, you
 // may change this if you want)
 bool FindPalindrome::isPalindrome(string currentString) const
 {
-	locale loc;
-	// make sure that the string is lower case...
-	convertToLowerCase(currentString);
-	// see if the characters are symmetric...
-	int stringLength = currentString.size();
-	for (int i=0; i<stringLength/2; i++) {
-		if (currentString[i] != currentString[stringLength - i - 1]) {
-			return false;
-		}
-	}
-	return true;
+    locale loc;
+    // make sure that the string is lower case...
+    convertToLowerCase(currentString);
+    // see if the characters are symmetric...
+    int stringLength = currentString.size();
+    for (int i=0; i<stringLength/2; i++) {
+        if (currentString[i] != currentString[stringLength - i - 1]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 //------------------- PUBLIC CLASS METHODS -------------------------------------
 
 FindPalindrome::FindPalindrome()
 {
-	// TODO need to implement this...
+    // Instantiate class variables
+    wordList = std::vector<string>();
+    palindromesList = std::vector<std::vector<string>>();
+    numPalindromes = 0;
 }
 
 FindPalindrome::~FindPalindrome()
 {
-	// TODO need to implement this...
+    // Clear class vectors
+    wordList.clear();
+    palindromesList.clear();
 }
 
 int FindPalindrome::number() const
 {
-	// TODO need to implement this...
-	return 10;
+    return numPalindromes;
 }
 
 void FindPalindrome::clear()
 {
-	// TODO need to implement this...
+    // Reset class variables
+    wordList.clear();
+    palindromesList.clear();
+    numPalindromes = 0;
 }
 
 bool FindPalindrome::cutTest1(const vector<string> & stringVector)
 {
-	// TODO need to implement this...
-	return false;
+    // Variable to store long character string as
+    std::string charList = "";
+
+    // Add all characters to character list
+    for (std::size_t i = 0; i < stringVector.size(); i++) {
+        std::string value = stringVector.at(i);
+        convertToLowerCase(value);
+        charList.append(value);
+    }
+
+    // Variables to track number of odd characters in the string
+    const std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    std::size_t oddChars = 0;
+
+    // Loop through looking for odd character numbering
+    for (std::size_t i = 0; i < alphabet.size(); i++) {
+        // Count how many occurances this character has
+        std::string testChar = alphabet.at(i);
+        std::size_t count = 0;
+        for (std::size_t j = 0; j < charList.size(); j++) {
+            if (charList.at(j) == testChar) {
+                count++;
+            }
+        }
+        // Check of count is odd, if so increment the number of odd chars
+        if (count % 2 != 0) {
+            // is odd
+            oddChars++;
+
+            // Check if we already have more than 1 odd character
+            if (oddChars > 1) {
+                return false;
+            }
+
+            // Check if we have a string of even length
+            if (charList.size() % 2 == 0) {
+                return false;
+            }
+        }
+    }
+
+    // Return valid palindrome could exist
+    return true;
 }
 
 bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
                               const vector<string> & stringVector2)
 {
-	// TODO need to implement this...
-	return false;
+    // Check if either string list is empty
+    if (stringVector1.size() == 0 || stringVector2.size() == 0) {
+        return false;
+    }
+
+    // String character lists to insert all strings from word lists into
+    std::string charList1 = "";
+    std::string charList2 = "";
+
+    // Copy stringVector1 to charList1
+    for (std::size_t i = 0; i < stringVector1.size(); i++) {
+        std::string value = stringVector1.at(i);
+        convertToLowerCase(value);
+        charList1.push_back(value);
+    }
+
+    // Copy stringVector2 to charList2
+    for (std::size_t i = 0; i < stringVector2.size(); i++) {
+        std::string value = stringVector2.at(i);
+        convertToLowerCase(value);
+        charList2.push_back(value);
+    }
+
+    // Determine which string is smaller
+    if (charList1.size() >= charList2.size()) {
+        // charList2 is smaller
+        // Check if all characters in charList2 appear in charList1 in reverse
+        for (std::size_t i = 0; i < charList2.size(); i++) {
+            // Get characters of both strings
+            char leftChar = charList2.at(i);
+            char rightChar = charList1.at(charList1.size() - i);
+
+            // Check if chars are the same
+            if (leftChar != rightChar) {
+                // Chars are not the same, test fails
+                return false;
+            }
+        }
+    } else {
+        // charList1 is smaller
+        // Check if all characters in charList1 appear in charList2 in reverse
+        for (std::size_t i = 0; i < charList2.size(); i++) {
+            // Get characters of both strings
+            char leftChar = charList1.at(i);
+            char rightChar = charList2.at(charList2.size() - i);
+
+            // Check if chars are the same
+            if (leftChar != rightChar) {
+                // Chars are not the same, test fails
+                return false;
+            }
+        }
+    }
+
+    // Test passes, return success
+    return true;
 }
 
 bool FindPalindrome::add(const string & value)
 {
-	// TODO need to implement this...
-	return false;
+    // Determine if word is made of allowed characters
+    for (std::size_t i = 0; i < value.size(); i++) {
+        if ((value[i] < 'a' || value [i] > 'z') && (value[i] < 'A' || value[i] > 'Z')) {
+            // String contains characters outside allowable space
+            return false;
+        }
+    }
+
+    // Determine if word is already in wordList
+    for (std::size_t i = 0; i < wordList.size(); i++) {
+        // Create lower cased versions for comparison
+        std::string testWordLower = wordList.at(i);
+        std::string valueLower = value;
+        convertToLowerCase(testWordLower);
+        convertToLowerCase(valueLower);
+
+        // Compare strings
+        if (testWordLower == valueLower) {
+            // String is already in wordList
+            return false;
+        }
+    }
+
+    // Add word to wordList
+    wordList.push_back(value);
+
+    // Recalculate palindromes
+    // Reset number of palindromes
+    numPalindromes = 0;
+    // Check if a palindrome can exist from the current word list
+    if (cutTest1(wordList)) {
+        // Find palindromes from wordlist
+        std::vector<std::string> candidates;
+        recursiveFindPalindromes(candidates, wordList);
+    }
+
+    // Return success
+    return true;
 }
 
 bool FindPalindrome::add(const vector<string> & stringVector)
 {
-	// TODO need to implement this...
-	return false;
+    // Perform checks per word
+    for (std::size_t i = 0; i < stringVector.size(); i++) {
+        std::string value = stringVector.at(i);
+
+        // Check if word is allowed
+        for (std::size_t j = 0; j < value.size(); j++) {
+            if ((value[j] < 'a' || value [j] > 'z') && (value[j] < 'A' || value[j] > 'Z')) {
+                // String contains characters outside allowable space
+                return false;
+            }
+        }
+
+        // Check if word is already in wordList
+        std::string valueLower = value;
+        convertToLowerCase(valueLower);
+        for (std::size_t j = 0; j < wordList.size(); j++) {
+            std::string wordLower = wordList.at(j);
+            convertToLowerCase(wordLower);
+            if (valueLower == wordLower) {
+                // String is already in wordlist
+                return false;
+            }
+        }
+    }
+
+    // Checks passed, add words to wordList
+    for (std::size_t i = 0; i < stringVector.size(); i++) {
+        wordList.push_back(stringVector.at(i));
+    }
+
+    // Recalculate palindromes
+    // Reset number of palindromes
+    numPalindromes = 0;
+    // Check if a palindrome can exist from the current word list
+    if (cutTest1(wordList)) {
+        // Find palindromes from wordlist
+        std::vector<std::string> candidates;
+        recursiveFindPalindromes(candidates, wordList);
+    }
+
+    // Return success
+    return true;
 }
 
 vector< vector<string> > FindPalindrome::toVector() const
 {
-	// TODO need to implement this...
-	vector<vector<string>> returnThingie;
-	return returnThingie;
+    return palindromesList;
 }
 
