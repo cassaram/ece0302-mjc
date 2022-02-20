@@ -42,7 +42,27 @@ bool isPost(string s) {
 }
 
 void convert(string &postfix, string &prefix) {
+    // Get last character of postfix
+    char ch = postfix.at(postfix.size() - 1 );
 
-  // TODO
-  
+    // Ensure last character is an operator
+    if (!isoperator(ch)) {
+        // Not an operator, return
+        return;
+    }
+
+    // Copy operator to prefix
+    prefix.push_back(ch);
+
+    // Copy rest of string to prefix
+    for (std::size_t i = 0; i < postfix.size(); i++) {
+        // Get character
+        ch = postfix.at(i);
+
+        // Skip operators
+        if (!isoperator(ch)) {
+            // Copy character to prefix
+            prefix.push_back(ch);
+        }
+    }
 }
