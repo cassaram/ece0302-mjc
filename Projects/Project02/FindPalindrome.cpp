@@ -29,18 +29,17 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
     // Lowest-level loop. currentStringVector is empty
     if (currentStringVector.size() == 0) {
         // String to use as a test case
-        std::string candidateString = "";
+        std::string candidateString;
 
         // Convert candidate palindrome to string
         for (std::size_t i = 0; i < candidateStringVector.size(); i++) {
-            candidateString.push_back(candidateStringVector.at(i));
+            candidateString += candidateStringVector.at(i);
         }
 
         // Check if candidateString is a palindrome
         if (isPalindrome(candidateString)) {
-            // String is a palindrome, add it to the list and increment the palindrome count
+            // String is a palindrome, add it to the list
             palindromesList.push_back(candidateStringVector);
-            numPalindromes++;
         }
 
         // Exit current recursion level
@@ -56,18 +55,15 @@ void FindPalindrome::recursiveFindPalindromes(vector<string>
 
     // Palindrome(s) exist, start sub-recursive loop
     for (std::size_t i = 0; i < currentStringVector.size(); i++) {
-        // Cache first word of current
-        std::string currentFirstCache = currentStringVector.at(i);
-
         // Move first word from current to candidate
-        candidateStringVector.push_back(currentFirstCache);
+        candidateStringVector.push_back(currentStringVector.at(i));
         currentStringVector.erase(currentStringVector.begin() + i);
 
         // Find palindromes of current candidate
         recursiveFindPalindromes(candidateStringVector, currentStringVector);
 
         // Rebuild currentStringVector to how it was before this loop
-        currentStringVector.insert(currentStringVector.begin(), currentFirstCache);
+        currentStringVector.insert(currentStringVector.begin(), candidateStringVector.back());
 
         // Rebuild candidateStringVector to how it was before this loop
         candidateStringVector.erase(candidateStringVector.end());
@@ -95,32 +91,25 @@ bool FindPalindrome::isPalindrome(string currentString) const
 
 //------------------- PUBLIC CLASS METHODS -------------------------------------
 
-FindPalindrome::FindPalindrome()
-{
-    // Instantiate class variables
-    wordList = std::vector<string>();
-    palindromesList = std::vector<std::vector<string>>();
-    numPalindromes = 0;
-}
+FindPalindrome::FindPalindrome() {}
 
 FindPalindrome::~FindPalindrome()
 {
     // Clear class vectors
-    wordList.clear();
-    palindromesList.clear();
+    std::vector<std::string>().swap(wordList);
+    std::vector<std::vector<std::string>>().swap(palindromesList);
 }
 
 int FindPalindrome::number() const
 {
-    return numPalindromes;
+    return palindromesList.size();
 }
 
 void FindPalindrome::clear()
 {
     // Reset class variables
-    wordList.clear();
-    palindromesList.clear();
-    numPalindromes = 0;
+    std::vector<std::string>().swap(wordList);
+    std::vector<std::vector<std::string>>().swap(palindromesList);
 }
 
 bool FindPalindrome::cutTest1(const vector<string> & stringVector)
@@ -136,16 +125,16 @@ bool FindPalindrome::cutTest1(const vector<string> & stringVector)
     }
 
     // Variables to track number of odd characters in the string
-    const std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
     std::size_t oddChars = 0;
 
     // Loop through looking for odd character numbering
     for (std::size_t i = 0; i < alphabet.size(); i++) {
         // Count how many occurances this character has
-        std::string testChar = alphabet.at(i);
+        std::string testChar = alphabet.substr(i, i+1);
         std::size_t count = 0;
         for (std::size_t j = 0; j < charList.size(); j++) {
-            if (charList.at(j) == testChar) {
+            if (charList.substr(j, j+1) == testChar) {
                 count++;
             }
         }
@@ -175,53 +164,83 @@ bool FindPalindrome::cutTest2(const vector<string> & stringVector1,
 {
     // Check if either string list is empty
     if (stringVector1.size() == 0 || stringVector2.size() == 0) {
-        return false;
+        return true;
     }
 
     // String character lists to insert all strings from word lists into
-    std::string charList1 = "";
-    std::string charList2 = "";
+    std::string charList1;
+    std::string charList2;
 
     // Copy stringVector1 to charList1
     for (std::size_t i = 0; i < stringVector1.size(); i++) {
         std::string value = stringVector1.at(i);
         convertToLowerCase(value);
-        charList1.push_back(value);
+        charList1 += value;
     }
 
     // Copy stringVector2 to charList2
     for (std::size_t i = 0; i < stringVector2.size(); i++) {
         std::string value = stringVector2.at(i);
         convertToLowerCase(value);
-        charList2.push_back(value);
+        charList2 += value;
     }
 
     // Determine which string is smaller
     if (charList1.size() >= charList2.size()) {
         // charList2 is smaller
-        // Check if all characters in charList2 appear in charList1 in reverse
-        for (std::size_t i = 0; i < charList2.size(); i++) {
-            // Get characters of both strings
-            char leftChar = charList2.at(i);
-            char rightChar = charList1.at(charList1.size() - i);
+        // Check if there are more of any character in charList2 than charList1
+        std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
+        for (std::size_t i = 0; i < alphabet.size(); i++) {
+            // Variables to track within loop
+            std::string testChar = alphabet.substr(i, i+1);
+            int tracker = 0;
 
-            // Check if chars are the same
-            if (leftChar != rightChar) {
-                // Chars are not the same, test fails
+            // Count all instances of the testChar in charList1
+            for (std::size_t j = 0; j < charList1.size(); j++) {
+                if (charList1.substr(j, j+1) == testChar) {
+                    tracker++;
+                }
+            }
+
+            // Count all instances of the testChar in charList2
+            for (std::size_t j = 0; j < charList2.size(); j++) {
+                if (charList2.substr(j, j+1) == testChar) {
+                    tracker--;
+                }
+            }
+
+            // Check if there are more instances in charList2 than charList1
+            if (tracker < 0) {
+                // Fails cut test
                 return false;
             }
         }
     } else {
         // charList1 is smaller
-        // Check if all characters in charList1 appear in charList2 in reverse
-        for (std::size_t i = 0; i < charList2.size(); i++) {
-            // Get characters of both strings
-            char leftChar = charList1.at(i);
-            char rightChar = charList2.at(charList2.size() - i);
+        // Check if there are more of any character in charList2 than charList1
+        std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
+        for (std::size_t i = 0; i < alphabet.size(); i++) {
+            // Variables to track within loop
+            std::string testChar = alphabet.substr(i, i+1);
+            int tracker = 0;
 
-            // Check if chars are the same
-            if (leftChar != rightChar) {
-                // Chars are not the same, test fails
+            // Count all instances of the testChar in charList2
+            for (std::size_t j = 0; j < charList2.size(); j++) {
+                if (charList2.substr(j, j+1) == testChar) {
+                    tracker++;
+                }
+            }
+
+            // Count all instances of the testChar in charList1
+            for (std::size_t j = 0; j < charList1.size(); j++) {
+                if (charList1.substr(j, j+1) == testChar) {
+                    tracker--;
+                }
+            }
+
+            // Check if there are more instances in charList2 than charList1
+            if (tracker < 0) {
+                // Fails cut test
                 return false;
             }
         }
@@ -260,8 +279,8 @@ bool FindPalindrome::add(const string & value)
     wordList.push_back(value);
 
     // Recalculate palindromes
-    // Reset number of palindromes
-    numPalindromes = 0;
+    // Clear palindromes list
+    palindromesList.clear();
     // Check if a palindrome can exist from the current word list
     if (cutTest1(wordList)) {
         // Find palindromes from wordlist
@@ -287,9 +306,19 @@ bool FindPalindrome::add(const vector<string> & stringVector)
             }
         }
 
-        // Check if word is already in wordList
+        // Check if word is in stringVector twice
         std::string valueLower = value;
         convertToLowerCase(valueLower);
+        for (std::size_t j = 0; j < stringVector.size(); j++) {
+            std::string wordLower = stringVector.at(j);
+            convertToLowerCase(wordLower);
+            if (i != j && valueLower == wordLower) {
+                // String is in stringVector twice
+                return false;
+            }
+        }
+
+        // Check if word is already in wordList
         for (std::size_t j = 0; j < wordList.size(); j++) {
             std::string wordLower = wordList.at(j);
             convertToLowerCase(wordLower);
@@ -306,8 +335,8 @@ bool FindPalindrome::add(const vector<string> & stringVector)
     }
 
     // Recalculate palindromes
-    // Reset number of palindromes
-    numPalindromes = 0;
+    // Clear palindromes list
+    palindromesList.clear();
     // Check if a palindrome can exist from the current word list
     if (cutTest1(wordList)) {
         // Find palindromes from wordlist

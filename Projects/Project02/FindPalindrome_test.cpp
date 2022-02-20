@@ -1,5 +1,4 @@
 #define CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_COLOUR_NONE
 #include "catch.hpp"
 #include "FindPalindrome.hpp"
 
@@ -23,7 +22,7 @@ TEST_CASE("Test number method", "[FindPalindrome]") {
     REQUIRE(b.add("test"));
     REQUIRE(b.number() == 0);
     REQUIRE(b.add("tset"));
-    REQUIRE(b.number() == 1);
+    REQUIRE(b.number() == 2);
     b.clear();
     REQUIRE(b.number() == 0);
     REQUIRE(b.add("noon"));
@@ -33,9 +32,9 @@ TEST_CASE("Test number method", "[FindPalindrome]") {
 TEST_CASE("Test clear method", "[FindPalindrome]") {
     FindPalindrome b;
     REQUIRE(b.number() == 0);
-    REQUIRE(b.add("test"));
-    REQUIRE(b.add("foo"));
-    REQUIRE(b.add("bar"));
+    REQUIRE(b.add("noon"));
+    REQUIRE(b.add("soon"));
+    REQUIRE(b.add("noos"));
     REQUIRE(b.number() != 0);
     b.clear();
     REQUIRE(b.number() == 0);
