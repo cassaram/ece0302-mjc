@@ -25,6 +25,9 @@ XMLParser::~XMLParser()
 // TODO: Implement the tokenizeInputString method
 bool XMLParser::tokenizeInputString(const std::string &inputString)
 {
+    // Ensure the class has been cleared
+    XMLParser::clear();
+
     // Iterate through the entire input string, character by character
     for (std::size_t i = 0; i < inputString.size(); i++) {
         // Check for start of element
