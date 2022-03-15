@@ -12,6 +12,8 @@
 template<class ItemType>
 Stack<ItemType>::Stack()
 {
+    currentSize = 0;
+    headPtr = nullptr;
 }  // end default constructor
 
 // TODO: Implement the destructor here
@@ -40,11 +42,19 @@ int Stack<ItemType>::size() const
 template<class ItemType>
 bool Stack<ItemType>::push(const ItemType& newItem)
 {
-    // Create new node containing item
-    Node<ItemType> newNode(newItem);
-    // Put new node at front of stack
-    newNode.setNext(headPtr);
-    headPtr = &newNode;
+    // Check if we have a head
+    if (headPtr == nullptr) {
+        // Don't have a head, make first node
+        headPtr = new Node<ItemType>(newItem);
+
+        // Increment stack size
+        currentSize++;
+
+        // Success, return true
+        return true;
+    }
+    // Create new node containing item and push to front of stack
+    headPtr = new Node<ItemType>(newItem, headPtr);
 
     // Increment size of stack
     currentSize++;
@@ -67,7 +77,7 @@ template<class ItemType>
 bool Stack<ItemType>::pop()
 {
     // Ensure top item exists
-    if (currentSize < 1 || headPtr == NULL) {
+    if (currentSize < 1 || headPtr == nullptr) {
         // Top item doesn't exist or is inaccessible
         // Exit with failure
         return false;
@@ -84,7 +94,7 @@ bool Stack<ItemType>::pop()
     currentSize--;
 
     // Clean-up memory from removed node
-    delete *n;
+    delete n;
 
     // Success, return true
     return true;
@@ -103,7 +113,7 @@ void Stack<ItemType>::clear()
         headPtr = n->getNext();
 
         // Delete old top node from memory
-        delete *n;
+        delete n;
 
         // Decrement stack size
         currentSize--;

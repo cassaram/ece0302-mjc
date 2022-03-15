@@ -7,6 +7,69 @@
 #include <assert.h>
 #include "XMLParser.hpp"
 
+/**
+ * @brief Method to check if a tag name string is valid
+ *
+ * @param name String to check
+ * @return true Name is valid
+ * @return false Name is not valid
+ */
+static bool isValidName(std::string name) {
+    // Vector containing all invalid characters in tag names
+    // Invalid characters: !"#$%&'()*+,/;<=>?@[\]^`{|}~
+    std::vector<char> invalidTagNames{'!','\"','#','$','%','&','\'','(',')','*','+',',','/',';','<','=','>','?','@','[','\\',']','^','`','{','|','}','~',' '};
+    // Vector containing all invalid first characters in tag names
+    // Invalid characters: -.0123456789
+    std::vector<char> invalidTagNamesFirstCharacter{'-','.','0','1','2','3','4','5','6','7','8','9'};
+
+    // Ensure invalid characters don't exist in the string
+    for (std::size_t i = 0; i < invalidTagNames.size(); i++) {
+        char invalidChar = invalidTagNames.at(i);
+        // Check each character in string against invalid character
+        for (std::size_t j = 0; j < name.size(); j++) {
+            if (name.at(j) == invalidChar) {
+                // String contains invalid character(s)
+                return false;
+            }
+        }
+    }
+
+    // Ensure first character doesn't contain an invalid first character
+    for (std::size_t i = 0; i < invalidTagNamesFirstCharacter.size(); i++) {
+        if (name.at(0) == invalidTagNamesFirstCharacter.at(i)) {
+            // Name contains invalid first letter
+            return false;
+        }
+    }
+
+    // Name is valid
+    return true;
+}
+
+// TODO: Implement a helper function to delete attributes from a START_TAG
+// or EMPTY_TAG string (you can change this...)
+/**
+ * @brief Creates a string with just the name of the element without attributes
+ *
+ * @param input String with / without attributes to remove
+ * @return std::string String without attributes
+ */
+static std::string deleteAttributes(std::string input)
+{
+    // Find index of last valid character in string
+    for (std::size_t i = 0; i < input.size(); i++) {
+        // Get character
+        char c = input.at(i);
+        // Check if whitespace
+        if (std::isspace(c)) {
+            // Return up to here
+            return input.substr(0, i);
+        }
+    }
+    // No (valid) attributes exist, return entire input
+    return input;
+}
+
 // TODO: Implement the constructor here
 XMLParser::XMLParser()
 {
@@ -52,7 +115,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
                 }
 
                 // Ensure we found a valid end
-                if ((inputString.at(j) != '>') || (inputString.at(j-1) != '?')) {
+                if ((j == inputString.size()) || (inputString.at(j) != '>') || (inputString.at(j-1) != '?')) {
                     // Invalid string
                     // Erase vector
                     tokenizedInputVector.clear();
@@ -62,7 +125,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 
                 // Get sub-string containing token
                 std::size_t tokenLength = (j-2) - (i+2) + 1;
-                std::string tokenString = inputString.substr(i+1, tokenLength);
+                std::string tokenString = inputString.substr(i+2, tokenLength);
 
                 // Create declaration token
                 TokenStruct token;
@@ -93,7 +156,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
                 }
 
                 // Ensure we found a valid end
-                if (inputString.at(j) != '>') {
+                if ((j == inputString.size()) || (inputString.at(j) != '>')) {
                     // Invalid string
                     // Erase vector
                     tokenizedInputVector.clear();
@@ -103,7 +166,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 
                 // Get sub-string containing token
                 std::size_t tokenLength = (j-1) - (i+2) + 1;
-                std::string tokenString = inputString.substr(i+1, tokenLength);
+                std::string tokenString = inputString.substr(i+2, tokenLength);
 
                 // Create end-tag token
                 TokenStruct token;
@@ -148,7 +211,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
                 }
 
                 // Ensure we found a valid end
-                if (inputString.at(j) != '>') {
+                if ((j == inputString.size()) || (inputString.at(j) != '>')) {
                     // Invalid string
                     // Erase vector
                     tokenizedInputVector.clear();
@@ -169,7 +232,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
                 // Create end-tag token
                 TokenStruct token;
                 token.tokenType = tokenType;
-                token.tokenString = tokenString;
+                token.tokenString = deleteAttributes(tokenString);
 
                 // Push token onto vector
                 tokenizedInputVector.push_back(token);
@@ -177,6 +240,8 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
                 // Handled tag, increment i to end of tag
                 i = j;
             }
+        } else if (std::isspace(inputString.at(i))){
+            // Do nothing, is white space between items
         } else {
             // Must be content
             // Tracks length of content
@@ -205,7 +270,7 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
 
             // Content can only exist between two elements / tokens
             // Ensure we found a valid end
-            if (inputString.at(j+1) != '<') {
+            if ((j == inputString.size()) || (inputString.at(j+1) != '<')) {
                 // Invalid string
                 // Erase vector
                 tokenizedInputVector.clear();
@@ -234,67 +299,6 @@ bool XMLParser::tokenizeInputString(const std::string &inputString)
     return true;
 }  // end
 
-// TODO: Implement a helper function to delete attributes from a START_TAG
-// or EMPTY_TAG string (you can change this...)
-/**
- * @brief Creates a string with just the name of the element without attributes
- *
- * @param input String with / without attributes to remove
- * @return std::string String without attributes
- */
-static std::string deleteAttributes(std::string input) const
-{
-    // Find index of last valid character in string
-    for (std::size_t i = 0; i < input.size(); i++) {
-        // Check if we are at the end of the name
-        if (input.at(i) == ' ') {
-            // Return name only
-            return input.substr(0, i);
-        }
-    }
-    // No (valid) attributes exist, return entire input
-    return input;
-}
-
-/**
- * @brief Method to check if a tag name string is valid
- *
- * @param name String to check
- * @return true Name is valid
- * @return false Name is not valid
- */
-static bool isValidName(std::string name) const {
-    // Vector containing all invalid characters in tag names
-    // Invalid characters: !"#$%&'()*+,/;<=>?@[\]^`{|}~
-    std::vector<char> invalidTagNames{'!','\"','#','$','%','&','\'','(',')','*','+',',','/',';','<','=','>','?','@','[','\\',']','^','`','{','|','}','~'};
-    // Vector containing all invalid first characters in tag names
-    // Invalid characters: -.0123456789
-    std::vector<char> invalidTagNamesFirstCharacter{'-','.','0','1','2','3','4','5','6','7','8','9'};
-
-    // Ensure invalid characters don't exist in the string
-    for (std::size_t i = 0; i < invalidTagNames.size(); i++) {
-        char invalidChar = invalidTagNames.at(i);
-        // Check each character in string against invalid character
-        for (std::size_t j = 0; j < name.size(); j++) {
-            if (name.at(j) == invalidChar) {
-                // String contains invalid character(s)
-                return false;
-            }
-        }
-    }
-
-    // Ensure first character doesn't contain an invalid first character
-    for (std::size_t i = 0; i < invalidTagNamesFirstCharacter.size(); i++) {
-        if (name.at(0) == invalidTagNamesFirstCharacter.at(i)) {
-            // Name contains invalid first letter
-            return false;
-        }
-    }
-
-    // Name is valid
-    return true;
-}
-
 // TODO: Implement the parseTokenizedInput method here
 bool XMLParser::parseTokenizedInput()
 {
@@ -305,58 +309,43 @@ bool XMLParser::parseTokenizedInput()
     }
 
     // Quickly check if the document looks roughly valid
-    // Check if document begins with a declaration tag
-    if (tokenizedInputVector.at(0).tokenType == DECLARATION) {
-        // Check if document is just an empty tag
-        if (tokenizedInputVector.at(1).tokenType == EMPTY_TAG) {
-            // Check if document only has the empty tag
-            if (tokenizedInputVector.size() > 2) {
-                // Not valid XML
-                return false;
-            }
-        } else {
-            // Check if document begins with a valid start tag
-            if (tokenizedInputVector.at(1).tokenType != START_TAG) {
-                // Not valid XML
-                return false;
-            }
-            // Check if the document ends with a valid end tag
-            if (tokenizedInputVector.back().tokenType != END_TAG) {
-                // Not valid XML
-                return false;
-            }
+    // Get first element after declarations
+    std::size_t firstNode = 0;
+    for (std::size_t i = 0; i < tokenizedInputVector.size(); i++) {
+        if (tokenizedInputVector.at(i).tokenType != DECLARATION) {
+            firstNode = i;
+            break;
+        }
+    }
+    // Check if document is just an empty tag
+    if (tokenizedInputVector.at(firstNode).tokenType == EMPTY_TAG) {
+        // Ensure document is just an empty tag
+        if (tokenizedInputVector.size() > firstNode+1) {
+            // Not valid XML
+            return false;
         }
     } else {
-        // Check if document is just an empty tag
-        if (tokenizedInputVector.at(0).tokenType == EMPTY_TAG) {
-            // Check if document only has the empty tag
-            if (tokenizedInputVector.size() > 1) {
-                // Not valid XML
-                return false;
-            }
-        } else {
-            // Check if document begins with a valid start tag
-            if (tokenizedInputVector.at(0).tokenType != START_TAG) {
-                // Not valid XML
-                return false;
-            }
-            // Check if the document ends with a valid end tag
-            if (tokenizedInputVector.back().tokenType != END_TAG) {
-                // Not valid XML
-                return false;
-            }
+        // Check if document begins and ends with a valid tag
+        if (tokenizedInputVector.at(firstNode).tokenType != START_TAG) {
+            // Not valid XML
+            return false;
+        }
+        // Check if the document ends with a valid end tag
+        if (tokenizedInputVector.back().tokenType != END_TAG) {
+            // Not valid XML
+            return false;
         }
     }
 
     // Clear parse stack
-    parseStack.clear();
+    parseStack->clear();
 
     // Iterate through elements
     for (std::size_t i = 0; i < tokenizedInputVector.size(); i++) {
         // Check for start tag
         if (tokenizedInputVector.at(i).tokenType == START_TAG) {
             // Get name of tag
-            std::string name = deleteAttributes(tokenizedInputVector.at(i).tokenString);
+            std::string name = tokenizedInputVector.at(i).tokenString;
             // Ensure name is valid
             if (!isValidName(name)) {
                 // Name not valid, xml not valid
@@ -371,7 +360,7 @@ bool XMLParser::parseTokenizedInput()
         if (tokenizedInputVector.at(i).tokenType == END_TAG) {
             // Ensure last item in stack has the same name
             // Get name of tag
-            std::string name = deleteAttributes(tokenizedInputVector.at(i).tokenString);
+            std::string name = tokenizedInputVector.at(i).tokenString;
             // Ensure name is valid
             if (!isValidName(name)) {
                 // Name not valid, xml not valid
@@ -380,24 +369,24 @@ bool XMLParser::parseTokenizedInput()
             // Check if last tag in stack is start node
             if (parseStack->peek() == name) {
                 // Valid XML, remove element from stack
-                parseStack.pop();
+                parseStack->pop();
             } else {
                 // Invalid XML, clear stack and exit
-                parseStack.clear();
+                parseStack->clear();
                 return false;
             }
         }
         // Check for empty tag
         if (tokenizedInputVector.at(i).tokenType == EMPTY_TAG) {
             // Get name of tag
-            std::string name = deleteAttributes(tokenizedInputVector.at(i).tokenString);
+            std::string name = tokenizedInputVector.at(i).tokenString;
             // Ensure name is valid
             if (!isValidName(name)) {
                 // Name not valid, xml not valid
                 return false;
             }
             // Add name to bag
-            elementNameBag.add(name);
+            elementNameBag->add(name);
         }
     }
 

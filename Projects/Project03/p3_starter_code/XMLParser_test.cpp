@@ -1,5 +1,4 @@
 #define CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_COLOUR_NONE
 #include <iostream>
 #include "catch.hpp"
 #include "XMLParser.hpp"
@@ -29,16 +28,35 @@ TEST_CASE( "Test Bag add", "[XMLParser]" )
 /*
  * Stack Class Tests
 */
+TEST_CASE( "Test Stack push", "[XMLParser]" )
+{
+    INFO("Hint: testing Stack push()");
+    // Create a Stack to hold ints
+    Stack<int> intStack;
+    int testSize = 3;
+    int stackSize;
+    bool success;
+    for (int i=0; i<testSize; i++) {
+        success = intStack.push(i);
+        REQUIRE(success);
+        stackSize = intStack.size();
+        success = (stackSize == (i+1));
+        REQUIRE(success);
+    }
+}
+
 TEST_CASE("Test Stack Size", "[XMLParser]") {
     Stack<int> s;
-    for (int i = 0; i < 10; i++) {
-        REQUIRE(s.size() == i);
-        s.push(i);
-    }
-    for (int i = 10; i > 0; i++) {
-        REQUIRE(s.size() == i);
-        s.pop();
-    }
+    REQUIRE(s.size() == 0);
+    s.push(1);
+    s.push(2);
+    s.push(3);
+    s.push(4);
+    REQUIRE(s.size() == 4);
+    s.pop();
+    s.pop();
+    s.pop();
+    s.pop();
     REQUIRE(s.size() == 0);
 }
 
@@ -49,7 +67,7 @@ TEST_CASE("Test Stack isEmpty", "[XMLParser]") {
         s.push(i);
     }
     REQUIRE(!s.isEmpty());
-    for (int i = 10; i > 0; i++) {
+    for (int i = 10; i > 0; i--) {
         s.pop();
     }
     REQUIRE(s.isEmpty());
@@ -62,7 +80,7 @@ TEST_CASE("Test Stack pop", "[XMLParser]") {
         s.push(i);
     }
     REQUIRE(!s.isEmpty());
-    for (int i = 10; i > 0; i++) {
+    for (int i = 10; i > 0; i--) {
         REQUIRE(s.pop());
     }
     REQUIRE(s.isEmpty());
@@ -76,9 +94,9 @@ TEST_CASE("Test Stack peek", "[XMLParser]") {
         REQUIRE(s.peek() == i);
     }
     REQUIRE(!s.isEmpty());
-    for (int i = 10; i > 0; i++) {
-        REQUIRE(s.pop());
+    for (int i = 9; i >= 0; i--) {
         REQUIRE(s.peek() == i);
+        REQUIRE(s.pop());
     }
     REQUIRE(s.isEmpty());
 }
@@ -95,23 +113,6 @@ TEST_CASE("Test Stack clear", "[XMLParser]") {
     s.clear();
     REQUIRE(s.isEmpty());
     REQUIRE(s.size() == 0);
-}
-
-TEST_CASE( "Test Stack push", "[XMLParser]" )
-{
-    INFO("Hint: testing Stack push()");
-    // Create a Stack to hold ints
-    Stack<int> intStack;
-    int testSize = 3;
-    int stackSize;
-    bool success;
-    for (int i=0; i<testSize; i++) {
-        success = intStack.push(i);
-        REQUIRE(success);
-        stackSize = intStack.size();
-        success = (stackSize == (i+1));
-        REQUIRE(success);
-    }
 }
 
 /*
@@ -174,9 +175,6 @@ TEST_CASE("Test XMLParser parseTokenizedInput", "[XMLParser]") {
     string testString4 = "<test>stuff";
     bool success4;
     success4 = p.tokenizeInputString(testString4);
-    REQUIRE(success4);
-    // Test valid xml
-    success4 = p.parseTokenizedInput();
     REQUIRE(!success4);
 }
 
@@ -328,7 +326,7 @@ TEST_CASE( "Test XMLParser Final Handout-0", "[XMLParser]" )
 
 TEST_CASE("Test XMLParser returnTokenizedInput", "[XMLParser]") {
     XMLParser p;
-    std::string testString = "<TestCase>Test Case Project<TestNode Attrib=\"1\"/><NextNode></NextNode></TestCase>"
+    std::string testString = "<TestCase>Test Case Project<TestNode Attrib=\"1\"/><NextNode></NextNode></TestCase>";
     REQUIRE(p.tokenizeInputString(testString));
     REQUIRE(p.parseTokenizedInput());
 
@@ -342,7 +340,7 @@ TEST_CASE("Test XMLParser returnTokenizedInput", "[XMLParser]") {
     b.tokenType = CONTENT;
     referenceVector.push_back(b);
     TokenStruct c;
-    c.tokenString = "TestNode Attrib=\"1\"";
+    c.tokenString = "TestNode";
     c.tokenType = EMPTY_TAG;
     referenceVector.push_back(c);
     TokenStruct d;
@@ -360,7 +358,7 @@ TEST_CASE("Test XMLParser returnTokenizedInput", "[XMLParser]") {
 
     std::vector<TokenStruct> parsedVector = p.returnTokenizedInput();
 
-    REQUIRE(referenceVector.size() == parsedVector.size())
+    REQUIRE(referenceVector.size() == parsedVector.size());
     for (std::size_t i = 0; i < referenceVector.size(); i++) {
         REQUIRE(referenceVector.at(i).tokenString == parsedVector.at(i).tokenString);
         REQUIRE(referenceVector.at(i).tokenType == parsedVector.at(i).tokenType);
@@ -369,7 +367,7 @@ TEST_CASE("Test XMLParser returnTokenizedInput", "[XMLParser]") {
 
 TEST_CASE("Test XMLParser containsElementName", "[XMLParser]") {
     XMLParser p;
-    std::string testString = "<TestCase>Test Case Project<TestNode Attrib=\"1\"/><NextNode></NextNode></TestCase>"
+    std::string testString = "<TestCase>Test Case Project<TestNode Attrib=\"1\"/><NextNode></NextNode></TestCase>";
     REQUIRE(p.tokenizeInputString(testString));
     REQUIRE(p.parseTokenizedInput());
 
@@ -380,18 +378,20 @@ TEST_CASE("Test XMLParser containsElementName", "[XMLParser]") {
 
 TEST_CASE("Test XMLParser frequencyElementName", "[XMLParser]") {
     XMLParser p;
-    std::string testString = "<TestCase>Test Case Project<TestNode Attrib=\"1\"/><NextNode></NextNode></TestCase>"
+    std::string testString = "<TestCase>Test Case Project<TestNode Attrib=\"1\"/><NextNode></NextNode><NextNode></NextNode></TestCase>";
     REQUIRE(p.tokenizeInputString(testString));
     REQUIRE(p.parseTokenizedInput());
 
-    REQUIRE(p.frequencyElementName("TestCase") == 2);
+    REQUIRE(p.frequencyElementName("TestCase") == 1);
     REQUIRE(p.frequencyElementName("TestNode") == 1);
     REQUIRE(p.frequencyElementName("NextNode") == 2);
+
+    REQUIRE(p.frequencyElementName("NotReal") == 0);
 }
 
 TEST_CASE("Test XMLParser clear", "[XMLParser]") {
     XMLParser p;
-    std::string testString = "<TestCase>Test Case Project<TestNode Attrib=\"1\"/><NextNode></NextNode></TestCase>"
+    std::string testString = "<TestCase>Test Case Project<TestNode Attrib=\"1\"/><NextNode></NextNode></TestCase>";
     REQUIRE(p.tokenizeInputString(testString));
     REQUIRE(p.parseTokenizedInput());
 
