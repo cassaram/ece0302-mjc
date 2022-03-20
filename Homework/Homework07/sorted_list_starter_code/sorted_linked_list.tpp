@@ -72,6 +72,9 @@ void SortedLinkedList<T>::removeAt(std::size_t position)
 {
     if(isEmpty()) throw std::range_error("empty list in remove");
 
+    // Ensure item is in range
+    if (position >= getLength() || position < 0) throw std::range_error("index out of bounds");
+
     // Remove item
     LinkedList<T>::remove(position+1);
 }
@@ -85,6 +88,10 @@ void SortedLinkedList<T>::clear()
 template <typename T>
 T SortedLinkedList<T>::getEntry(std::size_t position)
 {
+    // Ensure position is valid
+    if (position >= getLength() || position < 0) throw std::range_error("index out of bounds");
+
+    // Get entry
     return LinkedList<T>::getEntry(position+1);
 }
 
