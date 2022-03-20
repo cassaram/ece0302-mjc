@@ -70,7 +70,7 @@ void SortedLinkedList<T>::removeAt(std::size_t position)
     if(isEmpty()) throw std::range_error("empty list in remove");
 
     // Ensure position is valid
-    if (position < 0 || position >= LinkedList<T>::length) throw std::range_error("index out of bounds");
+    if (position < 0 || position >= getLength()) throw std::range_error("index out of bounds");
 
     // Remove item
     LinkedList<T>::remove(position);
