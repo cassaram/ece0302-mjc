@@ -58,7 +58,7 @@ void SortedLinkedList<T>::remove(const T& item)
 
     // Remove item at position (if it exists)
     std::size_t itemPos = getPosition(item) - 1;
-    if (item == getEntry(itemPos)) {
+    if (item == getEntry(itemPos-1)) {
         // Item exists, remove it
         LinkedList<T>::remove(itemPos);
     }
@@ -91,34 +91,12 @@ T SortedLinkedList<T>::getEntry(std::size_t position)
 template <typename T>
 long int SortedLinkedList<T>::getPosition(const T& newValue)
 {
-    // Find position of item in array via binary search
-    // Create variables
-    std::size_t startPos = 0;
-    std::size_t endPos = LinkedList<T>::length - 1;
+    // Find position in array via linear search
 
-    // Binary search loop to find position
-    while (startPos < endPos) {
-        // Get middle position
-        std::size_t middle = (startPos + endPos) / 2;
-
-        // Get which half of sub-array item is in
-        if (newValue >= getEntry(middle)) {
-            // Item is in upper half
-            // Move start pos to middle
-            startPos = middle + 1;
-        } else {
-            // Item is in lower half
-            // Move end pos to middle
-            endPos = middle;
-        }
-    }
-
-    // Get position of newValue
-    std::size_t insertPos;
-    if (newValue < getEntry(startPos)) {
-        insertPos = startPos;
-    } else {
-        insertPos = startPos + 1;
+    std::size_t insertPos = 0;
+    // Iterate until at the end of equal values
+    while (newValue >= getEntry(insertPos)) {
+        insertPos++;
     }
 
     return insertPos;
