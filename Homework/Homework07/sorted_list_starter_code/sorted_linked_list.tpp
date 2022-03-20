@@ -48,7 +48,7 @@ void SortedLinkedList<T>::insert(const T& item)
     std::size_t insertPos = getPosition(item);
 
     // Insert item at insertPos
-    LinkedList<T>::insert(insertPos, item);
+    LinkedList<T>::insert(insertPos+1, item);
 }
 
 template <typename T>
@@ -56,11 +56,14 @@ void SortedLinkedList<T>::remove(const T& item)
 {
     if(isEmpty()) throw std::range_error("empty list in remove");
 
-    // Remove item at position (if it exists)
-    std::size_t itemPos = getPosition(item) - 1;
-    if (item == getEntry(itemPos-1)) {
-        // Item exists, remove it
-        LinkedList<T>::remove(itemPos);
+    // Iterate through list
+    for (std::size_t i = 0; i < getLength(); i++) {
+        // Check if item is the same as the given item
+        if (getEntry(i) == item) {
+            // Remove item and exit loop
+            LinkedList<T>::remove(i+1);
+            break;
+        }
     }
 }
 
@@ -69,11 +72,8 @@ void SortedLinkedList<T>::removeAt(std::size_t position)
 {
     if(isEmpty()) throw std::range_error("empty list in remove");
 
-    // Ensure position is valid
-    if (position < 0 || position >= getLength()) throw std::range_error("index out of bounds");
-
     // Remove item
-    LinkedList<T>::remove(position);
+    LinkedList<T>::remove(position+1);
 }
 
 template <typename T>
@@ -95,7 +95,7 @@ long int SortedLinkedList<T>::getPosition(const T& newValue)
 
     std::size_t insertPos = 0;
     // Iterate until at the end of equal values
-    while (newValue >= getEntry(insertPos)) {
+    while ((insertPos < getLength())&&(newValue >= getEntry(insertPos))) {
         insertPos++;
     }
 
