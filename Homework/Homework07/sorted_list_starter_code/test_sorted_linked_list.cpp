@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_COLOUR_NONE
+//#define CATCH_CONFIG_COLOUR_NONE
 #include "catch.hpp"
 
 #include "sorted_linked_list.hpp"
