@@ -58,7 +58,7 @@ T RingBuffer<T>::dequeue_front()
 }
 
 template <typename T>
-T RingBuffer<T>::dequeue_back(const T& item) {
+T RingBuffer<T>::dequeue_back() {
     // Ensure queue has at least 1 element to dequeue
     assert(count > 0);
 
