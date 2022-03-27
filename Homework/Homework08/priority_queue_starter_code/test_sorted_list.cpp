@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_COLOUR_NONE
+//#define CATCH_CONFIG_COLOUR_NONE
 #include "catch.hpp"
 
 #include "dynamic_array_list.h"
@@ -19,7 +19,7 @@ TEST_CASE("Test SortedList copy constructor", "[sorted list]") {
     REQUIRE(!l1.isEmpty());
     slst l2(l1);
     REQUIRE(l2.getLength() == l1.getLength());
-    REQUIRE(l2.isEmpty());
+    REQUIRE(!l2.isEmpty());
 }
 
 TEST_CASE("Test SortedList copy assignment", "[sorted list]") {
@@ -29,7 +29,7 @@ TEST_CASE("Test SortedList copy assignment", "[sorted list]") {
     REQUIRE(!l1.isEmpty());
     slst l2 = l1;
     REQUIRE(l2.getLength() == l1.getLength());
-    REQUIRE(l2.isEmpty());
+    REQUIRE(!l2.isEmpty());
 }
 
 TEST_CASE("Test SortedList isEmpty method", "[sorted list]") {

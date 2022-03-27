@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_MAIN
-#define CATCH_CONFIG_COLOUR_NONE
+//#define CATCH_CONFIG_COLOUR_NONE
 #include "catch.hpp"
 
 #include "dynamic_array_list.h"
@@ -12,11 +12,11 @@ typedef PriorityQueue<int, SortedListType>  PriorityQueueType;
 TEST_CASE("Test Priority Queue methods", "[priority queue]") {
     PriorityQueueType pq;
     REQUIRE(pq.isEmpty());
-    for (int i = 13; i > 0; i--) {
+    for (int i = 1; i <= 13; i++) {
         pq.add(i);
     }
     REQUIRE(!pq.isEmpty());
-    for (int i = 1; i <= 13; i++) {
+    for (int i = 13; i > 0; i--) {
         REQUIRE(pq.peek() == i);
         pq.remove();
     }

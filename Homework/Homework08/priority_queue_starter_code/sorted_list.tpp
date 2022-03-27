@@ -41,7 +41,7 @@ template <typename T, typename L>
 void SortedList<T, L>::insert(const T& item)
 {
     // Find position to insert to
-    std::size_t pos = getPosition(item);
+    long int pos = getPosition(item);
 
     // Find abs of pos
     if (pos < 0) {
@@ -90,17 +90,40 @@ template <typename T, typename L>
 long int SortedList<T, L>::getPosition(const T& newValue)
 {
     // Determine result variable
-    std::size_t result = 0;
+    long int result = 0;
 
-    // Find position via linear search
-    for (std::size_t i = 0; i < getLength(); i++) {
-        // Update result
-        result = i;
-        // Determine if we are at position
-        if (newValue > getEntry) {
-            // At position, break
+    // Case for empty list
+    if (getLength() == 0) {
+        return 0;
+    }
+
+    // Find position via binary search
+    long int left = 0;
+    long int right = getLength() - 1;
+    long int middle;
+    // Perform binary search
+    while (left <= right) {
+        // Find middle
+        middle = (left + right) / 2;
+        // Check if we found value
+        if (getEntry(middle) == newValue) {
+            // Found value, exit search
+            left = middle;
             break;
+        } else if (getEntry(middle) > newValue) {
+            // In lower half
+            right = middle - 1;
+        } else {
+            // In upper half
+            left = middle + 1;
         }
+    }
+
+    result = left;
+
+    // Ensure result is in bounds
+    if (getLength() <= result) {
+        return (getLength() * -1);
     }
 
     // Determine if we found the item
