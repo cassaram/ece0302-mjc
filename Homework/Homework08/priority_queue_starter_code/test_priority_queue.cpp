@@ -6,12 +6,19 @@
 #include "sorted_list.h"
 #include "priority_queue.h"
 
-TEST_CASE("Testing Priority Queue", "[priority queue]") {
-  typedef SortedList<int, DynamicArrayList<int> > SortedListType;
-  typedef PriorityQueue<int, SortedListType>  PriorityQueueType;
+typedef SortedList<int, DynamicArrayList<int> > SortedListType;
+typedef PriorityQueue<int, SortedListType>  PriorityQueueType;
 
-  PriorityQueueType pq;
-
-  // TODO
-  
+TEST_CASE("Test Priority Queue methods", "[priority queue]") {
+    PriorityQueueType pq;
+    REQUIRE(pq.isEmpty());
+    for (int i = 13; i > 0; i--) {
+        pq.add(i);
+    }
+    REQUIRE(!pq.isEmpty());
+    for (int i = 1; i <= 13; i++) {
+        REQUIRE(pq.peek() == i);
+        pq.remove();
+    }
+    REQUIRE(pq.isEmpty());
 }
