@@ -179,6 +179,12 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
     Node<KeyType, ItemType> *curr_parent;
     search(key, curr, curr_parent);
 
+    // Ensure a node with same key was found
+    if (curr->key != key) {
+        // Key not found
+        return false;
+    }
+
     // case one thing in the tree
     if ((root->left == 0) && (root->right == 0)) {
         // Remove node
@@ -207,12 +213,14 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
     // case, item to delete has only a right child
     if ((curr->left == 0) && (curr->right != 0)) {
         // Check where to insert child node(s) onto parent / root
-        if (curr_parent->right == curr) {
-            // Parent -> Current
-            curr_parent->right = curr->right;
-        } else if (curr_parent->left == curr) {
-            // Current <- Parent
-            curr_parent->left = curr->right;
+        if (curr_parent != 0) {
+            if (curr_parent->right == curr) {
+                // Parent -> Current
+                curr_parent->right = curr->right;
+            } else {
+                // Current <- Parent
+                curr_parent->left = curr->right;
+            }
         } else {
             // Current is root
             root = curr->right;
@@ -229,12 +237,14 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
     // case, item to delete has only a left child
     if ((curr->left != 0) && (curr->right == 0)) {
         // Check where to insert child node(s) onto parent / root
-        if (curr_parent->right == curr) {
-            // Parent -> Current
-            curr_parent->right = curr->left;
-        } else if (curr_parent->left == curr) {
-            // Current <- Parent
-            curr_parent->left = curr->left;
+        if (curr_parent != 0) {
+            if (curr_parent->right == curr) {
+                // Parent -> Current
+                curr_parent->right = curr->left;
+            } else {
+                // Current <- Parent
+                curr_parent->left = curr->left;
+            }
         } else {
             // Current is root
             root = curr->left;
@@ -257,15 +267,17 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
 
         // Move successor to current's location
         // Check where to insert child node(s) onto parent / root
-        if (curr_parent->right == curr) {
-            // Parent -> Current
-            curr_parent->right = succ;
-        } else if (curr_parent->left == curr) {
-            // Current <- Parent
-            curr_parent->left = succ;
+        if (curr_parent != 0) {
+            if (curr_parent->right == curr) {
+                // Parent -> Current
+                curr_parent->right = curr->succ;
+            } else {
+                // Current <- Parent
+                curr_parent->left = curr->succ;
+            }
         } else {
             // Current is root
-            root = succ;
+            root = curr->succ;
         }
 
         // Move subtrees
