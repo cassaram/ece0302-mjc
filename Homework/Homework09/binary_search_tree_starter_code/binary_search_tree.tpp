@@ -102,7 +102,7 @@ bool BinarySearchTree<KeyType, ItemType>::insert(
     const KeyType& key, const ItemType& item)
 {
     // Create node from input
-    Node<KeyType, ItemType>* insertNode;
+    Node<KeyType, ItemType> *insertNode = new Node<KeyType, ItemType>;
     insertNode->key = key;
     insertNode->data = item;
 
