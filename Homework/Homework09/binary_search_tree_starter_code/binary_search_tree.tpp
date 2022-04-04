@@ -193,11 +193,8 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
         // Remove linkage from parent
         if (curr_parent->left == curr) {
             curr_parent->left = nullptr;
-        } else if (curr_parent->right == curr){
-            curr_parent->right = nullptr;
         } else {
-            // Something went seriously wrong
-            return false;
+            curr_parent->right = nullptr;
         }
 
         // Remove node
