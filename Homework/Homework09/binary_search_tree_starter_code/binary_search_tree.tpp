@@ -101,7 +101,44 @@ template <typename KeyType, typename ItemType>
 bool BinarySearchTree<KeyType, ItemType>::insert(
     const KeyType& key, const ItemType& item)
 {
-    // TODO 
+    // Create node from input
+    Node<KeyType, ItemType>* insertNode;
+    insertNode->key = key;
+    insertNode->data = item;
+
+    // Check if tree is empty
+    if (isEmpty()) {
+        // Insert node at root
+        root = insertNode;
+        insertNode = nullptr;
+
+        return true;
+    }
+
+    // Search for insertion position
+    Node<KeyType, ItemType>* curr;
+    Node<KeyType, ItemType>* curr_parent;
+    search(key, curr, curr_parent);
+
+    // Perform Insertion
+    if (key < curr->key) {
+        // Insert left
+        curr->left = insertNode;
+        insertNode = nullptr;
+
+        return true;
+    }
+
+    if (key > curr->key) {
+        // Insert right
+        curr->right = insertNode;
+        insertNode = nullptr;
+
+        return true;
+    }
+
+    // General failure at this point (duplicate?)
+    insertNode = nullptr;
     return false;
 }
 
@@ -133,21 +170,126 @@ bool BinarySearchTree<KeyType, ItemType>::retrieve(
 template <typename KeyType, typename ItemType>
 bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
 {
-    if (isEmpty())
+    if (isEmpty()) {
         return false; // empty tree
+    }
 
-    // TODO
-
+    // Search for item of key
+    Node<KeyType, ItemType> *curr;
+    Node<KeyType, ItemType> *curr_parent;
+    search(key, curr, curr_parent);
 
     // case one thing in the tree
+    if ((root->left == 0) && (root->right == 0)) {
+        // Remove node
+        delete root;
+        root = nullptr;
+
+        return true;
+    }
 
     // case, found deleted item at leaf
+    if ((curr->left == 0) && (curr->right == 0)) {
+        // Remove linkage from parent
+        if (curr_parent->left == curr) {
+            curr_parent->left = nullptr;
+        } else if (curr_parent->right == curr){
+            curr_parent->right = nullptr;
+        } else {
+            // Something went seriously wrong
+            return false;
+        }
+
+        // Remove node
+        delete curr;
+        curr = nullptr;
+
+        return true;
+    }
 
     // case, item to delete has only a right child
+    if ((curr->left == 0) && (curr->right != 0)) {
+        // Check where to insert child node(s) onto parent / root
+        if (curr_parent->right == curr) {
+            // Parent -> Current
+            curr_parent->right = curr->right;
+        } else if (curr_parent->left == curr) {
+            // Current <- Parent
+            curr_parent->left = curr->right;
+        } else if (curr_parent == 0) {
+            // Current is root
+            root = curr->right;
+        } else {
+            // Something went seriously wrong
+            return false;
+        }
+
+        // Remove node
+        curr->right = nullptr;
+        delete curr;
+        curr = nullptr;
+
+        return true;
+    }
 
     // case, item to delete has only a left child
+    if ((curr->left != 0) && (curr->right == 0)) {
+        // Check where to insert child node(s) onto parent / root
+        if (curr_parent->right == curr) {
+            // Parent -> Current
+            curr_parent->right = curr->left;
+        } else if (curr_parent->left == curr) {
+            // Current <- Parent
+            curr_parent->left = curr->left;
+        } else if (curr_parent == 0) {
+            // Current is root
+            root = curr->left;
+        } else {
+            // Something went seriously wrong
+            return false;
+        }
+
+        // Remove node
+        curr->left = nullptr;
+        delete curr;
+        curr = nullptr;
+
+        return true;
+    }
 
     // case, item to delete has two children
+    if ((curr->left != 0) && (curr->right != 0)) {
+        // Find successor by in-order
+        Node<KeyType, ItemType> *succ;
+        Node<KeyType, ItemType> *succ_parent;
+        inorder(curr, succ, succ_parent)
+
+        // Move successor to current's location
+        // Check where to insert child node(s) onto parent / root
+        if (curr_parent->right == curr) {
+            // Parent -> Current
+            curr_parent->right = succ;
+        } else if (curr_parent->left == curr) {
+            // Current <- Parent
+            curr_parent->left = succ;
+        } else if (curr_parent == 0) {
+            // Current is root
+            root = succ;
+        } else {
+            // Something went seriously wrong
+            return false;
+        }
+
+        // Move subtrees
+        succ->left = curr->left;
+        succ->right = curr->right;
+
+        // Remove current
+        delete curr;
+        curr = nullptr;
+
+        return true;
+    }
 
     return false; // default should never get here
 }
@@ -156,9 +298,20 @@ template <typename KeyType, typename ItemType>
 void BinarySearchTree<KeyType, ItemType>::inorder(Node<KeyType, ItemType>* curr,
     Node<KeyType, ItemType>*& in, Node<KeyType, ItemType>*& parent)
 {
-    // TODO 
+    // TODO
     // move right once
+    curr = curr->right;
+
     // move left as far as possible
+    // Check if we are as far left as possible
+    if (curr->left == 0) {
+        // Return with this node
+        in = curr;
+        return;
+    } else {
+        // Continue left via recursion
+        inorder(curr->left, in, curr);
+    }
 }
 
 template <typename KeyType, typename ItemType>
@@ -192,9 +345,35 @@ void BinarySearchTree<KeyType, ItemType>::search(KeyType key,
 
 template<typename KeyType, typename ItemType>
 void BinarySearchTree<KeyType, ItemType>::treeSort(ItemType arr[], int size) {
-    // TODO: check for duplicate items in the input array
+    // Function will use the array items as both key and value
 
-    // TODO: use the tree to sort the array items
+    // Ensure tree is empty
+    destroy();
 
-    // TODO: overwrite input array values with sorted values
+    // Check for duplicates while converting array to tree
+    // Check happens within insert function
+    for (std::size_t i = 0; i < size; i++) {
+        if (!insert(arr[i], arr[i])) {
+            // Duplicate or failure to insert
+            return;
+        }
+    }
+
+    // Put items back into array via inorder
+    for (std::size_t i = 0; i < size; i++) {
+        // Find smallest node via inorder
+        Node<KeyType, ItemType> *curr;
+        Node<KeyType, ItemType> *curr_parent;
+        inorder(root, curr, curr_parent);
+
+        // Write node data to array
+        arr[i] = curr->data;
+
+        // Delete node
+        remove(curr->key);
+
+        // Cleanup iteration
+        curr = nullptr;
+        curr_parent = nullptr;
+    }
 }
