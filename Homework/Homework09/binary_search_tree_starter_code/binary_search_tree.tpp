@@ -270,14 +270,14 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
         if (curr_parent != 0) {
             if (curr_parent->right == curr) {
                 // Parent -> Current
-                curr_parent->right = curr->succ;
+                curr_parent->right = succ;
             } else {
                 // Current <- Parent
-                curr_parent->left = curr->succ;
+                curr_parent->left = succ;
             }
         } else {
             // Current is root
-            root = curr->succ;
+            root = succ;
         }
 
         // Move subtrees
