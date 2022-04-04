@@ -262,7 +262,7 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
         // Find successor by in-order
         Node<KeyType, ItemType> *succ;
         Node<KeyType, ItemType> *succ_parent;
-        inorder(curr, succ, succ_parent)
+        inorder(curr, succ, succ_parent);
 
         // Move successor to current's location
         // Check where to insert child node(s) onto parent / root
