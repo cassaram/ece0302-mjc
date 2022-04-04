@@ -268,8 +268,8 @@ void BinaryTree<TreeItemType, FunctionType>::preorder(
     // Visit, Left, Right
     if (treePtr != 0) {
         visit(treePtr->item);
-        preorder(treePtr->leftChildPtr);
-        preorder(treePtr->rightChildPtr);
+        preorder(treePtr->leftChildPtr, visit);
+        preorder(treePtr->rightChildPtr, visit);
     }
 };
 
@@ -279,9 +279,9 @@ void BinaryTree<TreeItemType, FunctionType>::inorder(
 {
     // Left, Visit, Right
     if (treePtr != 0) {
-        inorder(treePtr->leftChildPtr);
+        inorder(treePtr->leftChildPtr, visit);
         visit(treePtr->item);
-        inorder(treePtr->rightChildPtr);
+        inorder(treePtr->rightChildPtr, visit);
     }
 };
 
@@ -291,8 +291,8 @@ void BinaryTree<TreeItemType, FunctionType>::postorder(
 {
     // Left, Right, Visit
     if (treePtr != 0) {
-        postorder(treePtr->leftChildPtr);
-        postorder(treePtr->rightChildPtr);
+        postorder(treePtr->leftChildPtr, visit);
+        postorder(treePtr->rightChildPtr, visit);
         visit(treePtr->item);
     }
 };
