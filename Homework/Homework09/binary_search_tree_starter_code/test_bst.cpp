@@ -96,3 +96,13 @@ TEST_CASE("Test Copy Assign", "[copy assign]") {
 
 }
 
+TEST_CASE("Test Tree Sort", "[treeSort]") {
+    int arr[] = {10, 40, 6, 20, 50};
+    TreeType bst1;
+    bst1.treeSort(arr, 5);
+
+    for (std::size_t i = 0; i < 4; i++) {
+        REQUIRE(arr[i] < arr[i+1]);
+    }
+}
+
