@@ -218,7 +218,7 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
             curr_parent->left = curr->right;
         } else {
             // Current is root
-            root = succ;
+            root = curr->right;
         }
 
         // Remove node
@@ -240,7 +240,7 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
             curr_parent->left = curr->left;
         } else {
             // Current is root
-            root = succ;
+            root = curr->left;
         }
 
         // Remove node
