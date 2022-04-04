@@ -310,6 +310,7 @@ void BinarySearchTree<KeyType, ItemType>::inorder(Node<KeyType, ItemType>* curr,
         return;
     } else {
         // Continue left via recursion
+        parent = curr;
         inorder(curr->left, in, curr);
     }
 }
