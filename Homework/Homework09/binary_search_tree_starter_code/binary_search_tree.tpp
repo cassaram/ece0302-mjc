@@ -216,12 +216,9 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
         } else if (curr_parent->left == curr) {
             // Current <- Parent
             curr_parent->left = curr->right;
-        } else if (curr == root) {
-            // Current is root
-            root = curr->right;
         } else {
-            // Something went seriously wrong
-            return false;
+            // Current is root
+            root = succ;
         }
 
         // Remove node
@@ -241,12 +238,9 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
         } else if (curr_parent->left == curr) {
             // Current <- Parent
             curr_parent->left = curr->left;
-        } else if (curr == root) {
-            // Current is root
-            root = curr->left;
         } else {
-            // Something went seriously wrong
-            return false;
+            // Current is root
+            root = succ;
         }
 
         // Remove node
@@ -272,12 +266,9 @@ bool BinarySearchTree<KeyType, ItemType>::remove(KeyType key)
         } else if (curr_parent->left == curr) {
             // Current <- Parent
             curr_parent->left = succ;
-        } else if (curr == root) {
+        } else {
             // Current is root
             root = succ;
-        } else {
-            // Something went seriously wrong
-            return false;
         }
 
         // Move subtrees
