@@ -27,7 +27,7 @@ Deque<T> &Deque<T>::operator=(const Deque<T> &other){
 }
 
 template <typename T>
-bool Deque<T>::isEmpty() const {
+bool Deque<T>::isEmpty() const noexcept {
     // Return if deque is empty
     return list.isEmpty();
 }
