@@ -130,7 +130,7 @@ bool isGoal(Image<Pixel> &image, PixelPos &pos) {
     std::size_t bottomBorder = image.height() - 1;
 
     // Check x
-    if (pox.x == leftBorder || pos.x == rightBorder) {
+    if (pos.x == leftBorder || pos.x == rightBorder) {
         return true;
     }
 
@@ -150,20 +150,20 @@ std::vector<PixelPos> getValidMoves(Image<Pixel> &image, PixelPos &pos) {
     up.x = pos.x;
     up.y = pos.y - 1;
     PixelPos down;
-    up.x = pos.x;
-    up.y = pos.y + 1;
+    down.x = pos.x;
+    down.y = pos.y + 1;
     PixelPos left;
-    up.x = pos.x - 1;
-    up.y = pos.y;
+    left.x = pos.x - 1;
+    left.y = pos.y;
     PixelPos right;
-    up.x = pos.x + 1;
-    up.y = pos.y;
+    right.x = pos.x + 1;
+    right.y = pos.y;
 
     // Determine which moves are valid, and append them to the return list
-    if (isMoveValid(up)) { moves.push_back(up); }
-    if (isMoveValid(down)) { moves.push_back(down); }
-    if (isMoveValid(left)) { moves.push_back(left); }
-    if (isMoveValid(right)) { moves.push_back(right); }
+    if (isMoveValid(image, up)) { moves.push_back(up); }
+    if (isMoveValid(image, down)) { moves.push_back(down); }
+    if (isMoveValid(image, left)) { moves.push_back(left); }
+    if (isMoveValid(image, right)) { moves.push_back(right); }
 
     // Return vector
     return moves;
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
     Image<Pixel> output = readFromFile(argv[2]);
 
     // Find starting point
-    MazeSolution startSoln = findStart(image);
+    MazeSolution startSoln = findStart(input);
     if (startSoln.status == Failure) {
         // No start found, exit failure
         std::cout << "No starting point found" << std::endl;
@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
     // Extract nearest exit point from solution
     PixelPos exit = exitSoln.exit;
 
-    // Set output pixel green
+    // Set exit pixel green
     output = input;
     output(exit.x, exit.y) = MAZE_GOAL;
 
