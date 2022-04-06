@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code"
+CMAKE_SOURCE_DIR = /home/user/Desktop/ece0302-mjc/Projects/Project04
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code"
+CMAKE_BINARY_DIR = /home/user/Desktop/ece0302-mjc/Projects/Project04
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -91,14 +91,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(CMAKE_COMMAND) -E cmake_progress_start "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code/CMakeFiles" "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code/lib/CMakeFiles/progress.marks"
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f CMakeFiles/Makefile2 lib/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code/CMakeFiles" 0
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(CMAKE_COMMAND) -E cmake_progress_start /home/user/Desktop/ece0302-mjc/Projects/Project04/CMakeFiles /home/user/Desktop/ece0302-mjc/Projects/Project04/lib/CMakeFiles/progress.marks
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f CMakeFiles/Makefile2 lib/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/user/Desktop/ece0302-mjc/Projects/Project04/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f CMakeFiles/Makefile2 lib/clean
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f CMakeFiles/Makefile2 lib/clean
 .PHONY : clean
 
 # The main clean target
@@ -108,22 +108,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f CMakeFiles/Makefile2 lib/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 lib/CMakeFiles/image.dir/rule:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/image.dir/rule
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f CMakeFiles/Makefile2 lib/CMakeFiles/image.dir/rule
 .PHONY : lib/CMakeFiles/image.dir/rule
 
 # Convenience name for target.
@@ -133,7 +133,7 @@ image: lib/CMakeFiles/image.dir/rule
 
 # fast build rule for target.
 image/fast:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/build
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/build
 .PHONY : image/fast
 
 image.o: image.cpp.o
@@ -142,7 +142,7 @@ image.o: image.cpp.o
 
 # target to build an object file
 image.cpp.o:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/image.cpp.o
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/image.cpp.o
 .PHONY : image.cpp.o
 
 image.i: image.cpp.i
@@ -151,7 +151,7 @@ image.i: image.cpp.i
 
 # target to preprocess a source file
 image.cpp.i:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/image.cpp.i
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/image.cpp.i
 .PHONY : image.cpp.i
 
 image.s: image.cpp.s
@@ -160,7 +160,7 @@ image.s: image.cpp.s
 
 # target to generate assembly for a file
 image.cpp.s:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/image.cpp.s
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/image.cpp.s
 .PHONY : image.cpp.s
 
 lodepng.o: lodepng.cpp.o
@@ -169,7 +169,7 @@ lodepng.o: lodepng.cpp.o
 
 # target to build an object file
 lodepng.cpp.o:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/lodepng.cpp.o
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/lodepng.cpp.o
 .PHONY : lodepng.cpp.o
 
 lodepng.i: lodepng.cpp.i
@@ -178,7 +178,7 @@ lodepng.i: lodepng.cpp.i
 
 # target to preprocess a source file
 lodepng.cpp.i:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/lodepng.cpp.i
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/lodepng.cpp.i
 .PHONY : lodepng.cpp.i
 
 lodepng.s: lodepng.cpp.s
@@ -187,7 +187,7 @@ lodepng.s: lodepng.cpp.s
 
 # target to generate assembly for a file
 lodepng.cpp.s:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/lodepng.cpp.s
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(MAKE) -f lib/CMakeFiles/image.dir/build.make lib/CMakeFiles/image.dir/lodepng.cpp.s
 .PHONY : lodepng.cpp.s
 
 # Help Target
@@ -217,6 +217,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd "/home/malloc/Documents/Datastructures/Spring22-ECE302-TAs/Projects/Project 4 - Pathfinder/p4_starter_code" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/user/Desktop/ece0302-mjc/Projects/Project04 && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

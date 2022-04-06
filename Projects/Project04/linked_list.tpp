@@ -144,6 +144,14 @@ bool LinkedList<T>::insert(std::size_t position, const T& item)
         return true;
     }
 
+    // Special case for first element in existing array
+    if (position == 1 && length != 0) {
+        newNode->setNext(firstNode);
+        firstNode = newNode;
+        length++;
+        return true;
+    }
+
     // Special case for last element
     if (position == length + 1) {
         lastNode->setNext(newNode);
