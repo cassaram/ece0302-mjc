@@ -87,12 +87,10 @@ MazeSolution breadthFirstSearch(Image<Pixel> &image, PixelPos &start) {
         }
     }
 
-    // Check for failure
-    if (frontier.isEmpty()) {
-        result.status = Failure;
-        result.exit = s;
-        return result;
-    }
+    // Must be failure
+    result.status = Failure;
+    result.exit = s;
+    return result;
 }
 
 // Function to find starting position from image
@@ -138,6 +136,9 @@ bool isGoal(Image<Pixel> &image, PixelPos &pos) {
     if (pos.y == topBorder || pos.y == bottomBorder) {
         return true;
     }
+
+    // Not a goal
+    return false;
 }
 
 // Function to determine a list of legal moves from a given position
