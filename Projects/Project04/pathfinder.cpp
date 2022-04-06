@@ -28,6 +28,14 @@ struct MazeSolution {
     PixelPos exit;
 };
 
+// ----- Prototypes -----
+MazeSolution breadthFirstSearch(Image<Pixel>&, PixelPos&);
+MazeSolution findStart(Image<Pixel>&);
+bool isGoal(Image<Pixel>&, PixelPos&);
+std::vector<PixelPos> getValidMoves(Image<Pixel>&, PixelPos&);
+bool isMoveValid(Image<Pixel>&, PixelPos&);
+int main(int argc, char *argv[]);
+
 // ----- Helper Functions -----
 // Function to perform breadth first search algorithm on an image
 MazeSolution breadthFirstSearch(Image<Pixel> &image, PixelPos &start) {
