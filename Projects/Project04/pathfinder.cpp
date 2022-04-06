@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
 
     // Read images from files
     Image<Pixel> input = readFromFile(argv[1]);
-    Image<Pixel> output = readFromFile(argv[2]);
+    Image<Pixel> output;
 
     // Find starting point
     MazeSolution startSoln = findStart(input);
