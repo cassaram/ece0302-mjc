@@ -56,7 +56,7 @@ TEST_CASE("Test popFront", "[deque]") {
         d.pushFront(i);
     }
     for (int i = 9; i >= 0; i--) {
-        REQUIRE(d.front == i);
+        REQUIRE(d.front() == i);
         d.popFront();
     }
 }
@@ -65,10 +65,10 @@ TEST_CASE("Test front", "[deque]") {
     Deque<int> d;
     for (int i = 0; i < 10; i++) {
         d.pushFront(i);
-        REQUIRE(d.front == i);
+        REQUIRE(d.front() == i);
     }
     for (int i = 9; i >= 0; i--) {
-        REQUIRE(d.front == i);
+        REQUIRE(d.front() == i);
         d.popFront();
     }
 }
