@@ -80,23 +80,7 @@ MazeSolution breadthFirstSearch(Image<Pixel> &image, PixelPos &start) {
         // Check other pixels
         PixelPos temp;
 
-        // Check pixel in previous column
-        temp.x = s.x;
-        temp.y = s.y - 1;
-        if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
-            explored[temp.x][temp.y] = true;
-            frontier.pushBack(temp);
-        }
-
-        // Check pixel in next column
-        temp.x = s.x;
-        temp.y = s.y + 1;
-        if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
-            explored[temp.x][temp.y] = true;
-            frontier.pushBack(temp);
-        }
-
-        // Check pixel in previous row
+        // Check left
         temp.x = s.x - 1;
         temp.y = s.y;
         if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
@@ -104,9 +88,25 @@ MazeSolution breadthFirstSearch(Image<Pixel> &image, PixelPos &start) {
             frontier.pushBack(temp);
         }
 
-        // Check pixel in next row
+        // Check up
+        temp.x = s.x;
+        temp.y = s.y + 1;
+        if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
+            explored[temp.x][temp.y] = true;
+            frontier.pushBack(temp);
+        }
+
+        // Check right
         temp.x = s.x + 1;
         temp.y = s.y;
+        if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
+            explored[temp.x][temp.y] = true;
+            frontier.pushBack(temp);
+        }
+
+        // Check left
+        temp.x = s.x;
+        temp.y = s.y - 1;
         if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
             explored[temp.x][temp.y] = true;
             frontier.pushBack(temp);
@@ -130,7 +130,7 @@ MazeSolution findStart(Image<Pixel> &image) {
     for (std::size_t x = 0; x < image.width(); x++) {
         for (std::size_t y = 0; y < image.height(); y++) {
             // Check if pixel is a starting color
-            if (image(y, x) == MAZE_START) {
+            if (image(x, y) == MAZE_START) {
                 // Add it to the list
                 PixelPos pos;
                 pos.x = x;
@@ -171,7 +171,7 @@ MazeSolution findStart(Image<Pixel> &image) {
 // Function to determine if a pixel position is a goal
 bool isGoal(Image<Pixel> &image, PixelPos &pos) {
     // Check wall
-    if (image(pos.y, pos.x) == MAZE_WALL) {
+    if (image(pos.x, pos.y) == MAZE_WALL) {
         return false;
     }
 
@@ -206,7 +206,7 @@ bool isMoveValid(Image<Pixel> &image, PixelPos &pos) {
     }
 
     // Ensure pixel is not black
-    if (image(pos.y, pos.x) == MAZE_WALL) {
+    if (image(pos.x, pos.y) == MAZE_WALL) {
         return false;
     }
 
