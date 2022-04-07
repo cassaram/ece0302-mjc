@@ -157,6 +157,7 @@ MazeSolution findStart(Image<Pixel> &image) {
 
     // Got through entire maze without finding solution
     // Exit with failure
+    std::cout << "Error: No starting point found" << std::endl;
     PixelPos pos;
     pos.x = 0;
     pos.y = 0;
@@ -222,15 +223,14 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    // Read images from files
+    // Read image from file and create output copy
     Image<Pixel> input = readFromFile(argv[1]);
-    Image<Pixel> output;
+    Image<Pixel> output = input;
 
     // Find starting point
     MazeSolution startSoln = findStart(input);
     if (startSoln.status == Failure) {
-        // No start found, exit failure
-        std::cout << "Error: No starting point found" << std::endl;
+        // Some error with start found, exit program
         return EXIT_FAILURE;
     }
 
@@ -240,22 +240,24 @@ int main(int argc, char *argv[])
     // Find solution
     MazeSolution exitSoln = breadthFirstSearch(input, start);
 
+    // Ensure solution exists
+    if (exitSoln.status == Success) {
+        // Extract nearest exit point from solution
+        PixelPos exit = exitSoln.exit;
+
+        // Set exit pixel green
+        output(exit.x, exit.y) = MAZE_GOAL;
+    }
+
+    // Write solution to file
+    writeToFile(output, argv[2]);
+
     // Check solution's validity
     if (exitSoln.status == Failure) {
         // Some error arose
         std::cout << "Error: Error finding exit, unsolvable?" << std::endl;
         return EXIT_FAILURE;
     }
-
-    // Extract nearest exit point from solution
-    PixelPos exit = exitSoln.exit;
-
-    // Set exit pixel green
-    output = input;
-    output(exit.x, exit.y) = MAZE_GOAL;
-
-    // Write solution to file
-    writeToFile(output, argv[2]);
 
     // End with success
     return EXIT_SUCCESS;
