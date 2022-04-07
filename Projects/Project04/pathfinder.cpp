@@ -77,7 +77,7 @@ MazeSolution breadthFirstSearch(Image<Pixel> &image, PixelPos &start) {
         for (std::size_t i = 0; i < moves.size(); i++) {
             PixelPos s_next = moves.at(i);
             // Check if it has already been explored
-            if (explored[s_next.x][s_next.y]) {
+            if (!explored[s_next.x][s_next.y]) {
                 // Check if goal
                 if (isGoal(image, s_next)) {
                     result.status = Success;
