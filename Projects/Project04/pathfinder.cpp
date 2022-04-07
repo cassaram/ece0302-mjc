@@ -63,9 +63,6 @@ MazeSolution breadthFirstSearch(Image<Pixel> &image, PixelPos &start) {
         s = frontier.front();
         frontier.popFront();
 
-        // DEBUG:
-        std::cout << "Evaluating at (" << s.x << ", " << s.y << ").\n";
-
         // Add state to explored
         explored[s.x][s.y] = true;
 
