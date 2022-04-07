@@ -64,6 +64,9 @@ MazeSolution breadthFirstSearch(Image<Pixel> &image, PixelPos &start) {
         s = frontier.front();
         frontier.popFront();
 
+        // DEBUG:
+        std::cout << "Evaluating at (" << s.x << ", " << s.y << ").\n";
+
         // Add state to explored
         explored[s.x][s.y] = true;
 
@@ -194,7 +197,7 @@ int main(int argc, char *argv[])
 {
     // Handle command-line arguments
     if (argc != 3) {
-        std::cout << "Usage: pathfinder"
+        std::cout << "Error: Usage: pathfinder"
                 << "<input_image_filename> <output_image_filename>\n"
                 << std::endl;
         return EXIT_FAILURE;
@@ -208,7 +211,7 @@ int main(int argc, char *argv[])
     MazeSolution startSoln = findStart(input);
     if (startSoln.status == Failure) {
         // No start found, exit failure
-        std::cout << "No starting point found" << std::endl;
+        std::cout << "Error: No starting point found" << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -221,7 +224,7 @@ int main(int argc, char *argv[])
     // Check solution's validity
     if (exitSoln.status == Failure) {
         // Some error arose
-        std::cout << "Error finding exit, unsolvable?" << std::endl;
+        std::cout << "Error: Error finding exit, unsolvable?" << std::endl;
         return EXIT_FAILURE;
     }
 
