@@ -32,7 +32,6 @@ struct MazeSolution {
 MazeSolution breadthFirstSearch(Image<Pixel>&, PixelPos&);
 MazeSolution findStart(Image<Pixel>&);
 bool isGoal(Image<Pixel>&, PixelPos&);
-std::vector<PixelPos> getValidMoves(Image<Pixel>&, PixelPos&);
 bool isMoveValid(Image<Pixel>&, PixelPos&);
 int main(int argc, char *argv[]);
 
@@ -70,23 +69,47 @@ MazeSolution breadthFirstSearch(Image<Pixel> &image, PixelPos &start) {
         // Add state to explored
         explored[s.x][s.y] = true;
 
-        // Get legal moves
-        std::vector<PixelPos> moves = getValidMoves(image, s);
+        // Check current pixel
+        if (isGoal(image, s)) {
+            // Found goal, return success
+            result.status = Success;
+            result.exit = s;
+            return result;
+        }
 
-        // Iterate through legal moves
-        for (std::size_t i = 0; i < moves.size(); i++) {
-            PixelPos s_next = moves.at(i);
-            // Check if it has already been explored
-            if (!explored[s_next.x][s_next.y]) {
-                // Check if goal
-                if (isGoal(image, s_next)) {
-                    result.status = Success;
-                    result.exit = s_next;
-                    return result;
-                }
-                // Add to frontier
-                frontier.pushBack(s_next);
-            }
+        // Check other pixels
+        PixelPos temp;
+
+        // Check pixel in previous column
+        temp.x = s.x;
+        temp.y = s.y - 1;
+        if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
+            explored[temp.x][temp.y] = true;
+            frontier.pushBack(temp);
+        }
+
+        // Check pixel in next column
+        temp.x = s.x;
+        temp.y = s.y + 1;
+        if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
+            explored[temp.x][temp.y] = true;
+            frontier.pushBack(temp);
+        }
+
+        // Check pixel in previous row
+        temp.x = s.x - 1;
+        temp.y = s.y;
+        if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
+            explored[temp.x][temp.y] = true;
+            frontier.pushBack(temp);
+        }
+
+        // Check pixel in next row
+        temp.x = s.x + 1;
+        temp.y = s.y;
+        if (isMoveValid(image, temp) && !explored[temp.x][temp.y]) {
+            explored[temp.x][temp.y] = true;
+            frontier.pushBack(temp);
         }
     }
 
@@ -98,18 +121,41 @@ MazeSolution breadthFirstSearch(Image<Pixel> &image, PixelPos &start) {
 
 // Function to find starting position from image
 MazeSolution findStart(Image<Pixel> &image) {
+    // Result to be returned
     MazeSolution result;
+    // Vector to store all possible starts
+    std::vector<PixelPos> results;
+
+    // Search maze by x and y
     for (std::size_t x = 0; x < image.width(); x++) {
         for (std::size_t y = 0; y < image.height(); y++) {
-            if (image(x, y) == MAZE_START) {
+            // Check if pixel is a starting color
+            if (image(y, x) == MAZE_START) {
+                // Add it to the list
                 PixelPos pos;
                 pos.x = x;
                 pos.y = y;
-                result.status = Success;
-                result.exit = pos;
-                return result;
+                results.push_back(pos);
             }
         }
+    }
+
+    // Check how many starts we have
+    if (results.size() > 1) {
+        // Found more than 1 starting point.
+        // Exit with failure
+        std::cout << "Error: More than 1 starting point found" << std::endl;
+        result.status = Failure;
+        return result;
+    }
+
+    // Check for 1 starting position
+    if (results.size() == 1) {
+        // Found extactly 1 start
+        // Return success
+        result.status = Success;
+        result.exit = results.at(0);
+        return result;
     }
 
     // Got through entire maze without finding solution
@@ -124,6 +170,11 @@ MazeSolution findStart(Image<Pixel> &image) {
 
 // Function to determine if a pixel position is a goal
 bool isGoal(Image<Pixel> &image, PixelPos &pos) {
+    // Check wall
+    if (image(pos.y, pos.x) == MAZE_WALL) {
+        return false;
+    }
+
     // Get borders
     std::size_t leftBorder = 0;
     std::size_t rightBorder = image.width() - 1;
@@ -144,35 +195,6 @@ bool isGoal(Image<Pixel> &image, PixelPos &pos) {
     return false;
 }
 
-// Function to determine a list of legal moves from a given position
-std::vector<PixelPos> getValidMoves(Image<Pixel> &image, PixelPos &pos) {
-    // Declare return array
-    std::vector<PixelPos> moves;
-
-    // Declare possible moves
-    PixelPos down;
-    down.x = pos.x;
-    down.y = pos.y + 1;
-    PixelPos left;
-    left.x = pos.x - 1;
-    left.y = pos.y;
-    PixelPos up;
-    up.x = pos.x;
-    up.y = pos.y - 1;
-    PixelPos right;
-    right.x = pos.x + 1;
-    right.y = pos.y;
-
-    // Determine which moves are valid, and append them to the return list
-    if (isMoveValid(image, down)) { moves.push_back(down); }
-    if (isMoveValid(image, left)) { moves.push_back(left); }
-    if (isMoveValid(image, up)) { moves.push_back(up); }
-    if (isMoveValid(image, right)) { moves.push_back(right); }
-
-    // Return vector
-    return moves;
-}
-
 // Function to determine if a pixel position is valid
 bool isMoveValid(Image<Pixel> &image, PixelPos &pos) {
     // Ensure position is within borders
@@ -184,7 +206,7 @@ bool isMoveValid(Image<Pixel> &image, PixelPos &pos) {
     }
 
     // Ensure pixel is not black
-    if (image(pos.x, pos.y) == MAZE_WALL) {
+    if (image(pos.y, pos.x) == MAZE_WALL) {
         return false;
     }
 
