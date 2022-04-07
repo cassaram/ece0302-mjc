@@ -150,23 +150,23 @@ std::vector<PixelPos> getValidMoves(Image<Pixel> &image, PixelPos &pos) {
     std::vector<PixelPos> moves;
 
     // Declare possible moves
-    PixelPos up;
-    up.x = pos.x;
-    up.y = pos.y - 1;
     PixelPos down;
     down.x = pos.x;
     down.y = pos.y + 1;
     PixelPos left;
     left.x = pos.x - 1;
     left.y = pos.y;
+    PixelPos up;
+    up.x = pos.x;
+    up.y = pos.y - 1;
     PixelPos right;
     right.x = pos.x + 1;
     right.y = pos.y;
 
     // Determine which moves are valid, and append them to the return list
-    if (isMoveValid(image, up)) { moves.push_back(up); }
     if (isMoveValid(image, down)) { moves.push_back(down); }
     if (isMoveValid(image, left)) { moves.push_back(left); }
+    if (isMoveValid(image, up)) { moves.push_back(up); }
     if (isMoveValid(image, right)) { moves.push_back(right); }
 
     // Return vector
