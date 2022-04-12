@@ -40,6 +40,12 @@ void HeapPriorityQueue<T>::add(const T& item)
     // Perform insertion at end of list
     lst.insert(lst.getLength(), item);
 
+    // Check for first element insertion
+    if (lst.getLength() == 1) {
+        // No reason to continue as its a 1-element heap
+        return;
+    }
+
     // Get variables to iterate through heap bottom-up
     std::size_t element = lst.getLength() - 1;
     std::size_t parent = (element - 1) / 2;
