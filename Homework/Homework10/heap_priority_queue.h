@@ -41,7 +41,7 @@ void HeapPriorityQueue<T>::add(const T& item)
     lst.insert(lst.getLength(), item);
 
     // Get variables to iterate through heap bottom-up
-    std::size_t element = lst.getLength() + 1;
+    std::size_t element = lst.getLength() - 1;
     std::size_t parent = (element - 1) / 2;
 
     // Iterate through heap array
