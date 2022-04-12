@@ -80,7 +80,8 @@ void HeapPriorityQueue<T>::remove()
         }
 
         // Handle each child node
-        for (std::size_t i = 0; i < children; i++) {
+        std::size_t foundIndex = 0;
+        for (std::size_t i = 1; i <= children; i++) {
             // Check if child is larger than parent node
             if (lst.getEntry(index + i) > lst.getEntry(index)) {
                 // Swap nodes
@@ -89,8 +90,14 @@ void HeapPriorityQueue<T>::remove()
                 lst.setEntry(index + i, item);
 
                 // Update index
-                index = index + i;
+                foundIndex = index + i;
             }
+        }
+
+        if (foundIndex != 0) {
+            index = foundIndex;
+        } else {
+            index += children;
         }
     }
 }
