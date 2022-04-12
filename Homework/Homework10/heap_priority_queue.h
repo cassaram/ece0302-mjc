@@ -71,7 +71,7 @@ void HeapPriorityQueue<T>::remove()
 
     // Re-sort top-down
     std::size_t index = 0;
-    while (index < lst.getLength()) {
+    while (index < lst.getLength() - 1) {
         // Check how many child nodes this node has
         std::size_t children = (lst.getLength() - 1) - index;
         // Assert binary structure
