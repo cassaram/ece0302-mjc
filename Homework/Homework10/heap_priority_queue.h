@@ -51,7 +51,7 @@ void HeapPriorityQueue<T>::add(const T& item)
     std::size_t parent = (element - 1) / 2;
 
     // Iterate through heap array
-    while ((parent >= 1) && (lst.getEntry(parent) < item)) {
+    while ((element >= 1) && (lst.getEntry(parent) < item)) {
         // Replace current position with parent
         lst.setEntry(element, lst.getEntry(parent));
         lst.setEntry(parent, item);
