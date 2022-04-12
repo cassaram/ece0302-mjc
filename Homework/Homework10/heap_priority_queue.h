@@ -51,7 +51,7 @@ void HeapPriorityQueue<T>::add(const T& item)
     std::size_t parent = (element - 1) / 2;
 
     // Iterate through heap array
-    while ((element >= 1) && (lst.getEntry(parent) < item)) {
+    while ((element >= 1) && (lst.getEntry(parent) < lst.getEntry(element))) {
         // Replace current position with parent
         lst.setEntry(element, lst.getEntry(parent));
         lst.setEntry(parent, item);
@@ -66,7 +66,7 @@ template <typename T>
 void HeapPriorityQueue<T>::remove()
 {
     // Replace root with last node and delete last element
-    lst.setEntry(0, lst.getLength() - 1);
+    lst.setEntry(0, lst.getEntry(lst.getLength() - 1));
     lst.remove(lst.getLength() - 1);
 
     // Re-sort top-down
@@ -89,9 +89,9 @@ void HeapPriorityQueue<T>::remove()
         // Check if largest is i
         if (largest != i) {
             // Swap largest and i
-            T item = lst.getEntry(i);
-            lst.setEntry(i, lst.getEntry(largest));
-            lst.setEntry(largest, item);
+            T temp = lst.getEntry(largest);
+            lst.setEntry(largest, lst.getEntry(i));
+            lst.setEntry(i, temp);
 
             // Increment i
             i = largest;
