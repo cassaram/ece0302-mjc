@@ -44,7 +44,7 @@ void HeapPriorityQueue<T>::add(const T& item)
     // Iterate through heap array
     while ((parent >= 1) && (lst.getEntry(parent) < item)) {
         // Replace current position with parent
-        lst.setEntry(element) = lst.getEntry(parent);
+        lst.setEntry(element, lst.getEntry(parent));
 
         // Move to next parent
         element = parent;
