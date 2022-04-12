@@ -48,13 +48,12 @@ void HeapPriorityQueue<T>::add(const T& item)
     while ((parent >= 1) && (lst.getEntry(parent) < item)) {
         // Replace current position with parent
         lst.setEntry(element, lst.getEntry(parent));
+        lst.setEntry(parent, item);
 
         // Move to next parent
         element = parent;
         parent = (parent - 1) / 2;
     }
-    // Insert element
-    lst.setEntry(element, item);
 }
 
 template <typename T>
