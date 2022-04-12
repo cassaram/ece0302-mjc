@@ -51,7 +51,7 @@ void HeapPriorityQueue<T>::add(const T& item)
         parent = (parent - 1) / 2;
     }
     // Insert element
-    lst.in(element, item);
+    lst.setEntry(element, item);
 }
 
 template <typename T>
