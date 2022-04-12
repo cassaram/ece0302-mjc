@@ -65,8 +65,34 @@ void HeapPriorityQueue<T>::add(const T& item)
 template <typename T>
 void HeapPriorityQueue<T>::remove()
 {
-    // Remove item
-    lst.remove(0);
+    // Replace root with last node and delete last element
+    lst.setEntry(0, lst.getLength() - 1);
+    lst.remove(lst.getLength() - 1);
+
+    // Re-sort top-down
+    std::size_t index = 0;
+    while (index < lst.getLength()) {
+        // Check how many child nodes this node has
+        std::size_t children = (lst.getLength() - 1) - index;
+        // Assert binary structure
+        if (children > 2) {
+            children = 2;
+        }
+
+        // Handle each child node
+        for (std::size_t i = 0; i < children; i++) {
+            // Check if child is larger than parent node
+            if (lst.getEntry(index + i) > lst.getEntry(index)) {
+                // Swap nodes
+                T item = lst.getEntry(index);
+                lst.setEntry(index, lst.getEntry(index+i));
+                lst.setEntry(index + i, item);
+
+                // Update index
+                index = index + i;
+            }
+        }
+    }
 }
 
 template <typename T>
