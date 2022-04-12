@@ -37,6 +37,9 @@ bool HeapPriorityQueue<T>::isEmpty()
 template <typename T>
 void HeapPriorityQueue<T>::add(const T& item)
 {
+    // Perform insertion at end of list
+    lst.insert(lst.getLength(), item);
+
     // Get variables to iterate through heap bottom-up
     std::size_t element = lst.getLength() + 1;
     std::size_t parent = (element - 1) / 2;
@@ -44,12 +47,7 @@ void HeapPriorityQueue<T>::add(const T& item)
     // Iterate through heap array
     while ((parent >= 1) && (lst.getEntry(parent) < item)) {
         // Replace current position with parent
-        // Guard out of bounds errors
-        if (element >= lst.getLength()) {
-            lst.insert(lst.getLength(), lst.getEntry(parent));
-        } else {
-            lst.setEntry(element, lst.getEntry(parent));
-        }
+        lst.setEntry(element, lst.getEntry(parent));
 
         // Move to next parent
         element = parent;
