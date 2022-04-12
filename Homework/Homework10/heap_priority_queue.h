@@ -70,34 +70,34 @@ void HeapPriorityQueue<T>::remove()
     lst.remove(lst.getLength() - 1);
 
     // Re-sort top-down
-    std::size_t index = 0;
-    while (index < lst.getLength() - 1) {
-        // Check how many child nodes this node has
-        std::size_t children = (lst.getLength() - 1) - index;
-        // Assert binary structure
-        if (children > 2) {
-            children = 2;
+    std::size_t i = 0;
+    while (i < lst.getLength()) {
+        // Find children
+        std::size_t left = 2 * i + 1;
+        std::size_t right = 2 * i + 2;
+
+        // Perform search
+        // Find largest
+        std::size_t largest = i;
+        if ((left < lst.getLength()) && (lst.getEntry(left) > lst.getEntry(largest))) {
+            largest = left;
+        }
+        if ((right < lst.getLength()) && (lst.getEntry(right) > lst.getEntry(largest))) {
+            largest = right;
         }
 
-        // Handle each child node
-        std::size_t foundIndex = 0;
-        for (std::size_t i = 1; i <= children; i++) {
-            // Check if child is larger than parent node
-            if (lst.getEntry(index + i) > lst.getEntry(index)) {
-                // Swap nodes
-                T item = lst.getEntry(index);
-                lst.setEntry(index, lst.getEntry(index+i));
-                lst.setEntry(index + i, item);
+        // Check if largest is i
+        if (largest != i) {
+            // Swap largest and i
+            T item = lst.getEntry(i);
+            lst.setEntry(i, lst.getEntry(largest));
+            lst.setEntry(largest, item);
 
-                // Update index
-                foundIndex = index + i;
-            }
-        }
-
-        if (foundIndex != 0) {
-            index = foundIndex;
+            // Increment i
+            i = largest;
         } else {
-            index += children;
+            // Sorted
+            break;
         }
     }
 }
