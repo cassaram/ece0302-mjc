@@ -71,7 +71,7 @@ void HeapPriorityQueue<T>::remove()
 
     // Re-sort top-down
     std::size_t i = 0;
-    while (i < lst.getLength()) {
+    while (i < lst.getLength()-1) {
         // Find children
         std::size_t left = 2 * i + 1;
         std::size_t right = 2 * i + 2;
