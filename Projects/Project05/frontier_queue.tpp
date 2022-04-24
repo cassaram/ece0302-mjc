@@ -20,8 +20,8 @@ State<T> frontier_queue<T>::pop() {
 
     // Swap item with largest child as much as possible
     std::size_t parent = 0;
-    std::size_t leftChild;
-    std::size_t rightChild;
+    std::size_t leftChild = 1;
+    std::size_t rightChild = 2;
 
     while (leftChild < queue.size()) {
         // Get child nodes
