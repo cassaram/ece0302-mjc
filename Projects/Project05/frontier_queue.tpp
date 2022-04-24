@@ -23,7 +23,7 @@ State<T> frontier_queue<T>::pop() {
     std::size_t leftChild = (2 * parent) + 1;
     std::size_t rightChild = leftChild + 1;
 
-    while (leftChild < queue.size()) {
+    while ((leftChild < queue.size()) && (parent < queue.size())) {
         // Find smallest child
         std::size_t smallestChild = -1;
         if ((leftChild < queue.size()) && (rightChild < queue.size())) {
