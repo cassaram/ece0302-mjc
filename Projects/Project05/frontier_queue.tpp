@@ -29,25 +29,11 @@ State<T> frontier_queue<T>::pop() {
         rightChild = leftChild + 1;
 
         // Find smallest child
-        std::size_t smallestChild = -1;
-        if ((leftChild < queue.size()) && (rightChild < queue.size())) {
-            // Two children
-            if (queue.at(leftChild).getFCost() < queue.at(rightChild).getFCost()) {
-                smallestChild = leftChild;
-            } else {
+        std::size_t smallestChild = leftChild;
+        if (rightChild < queue.size()) {
+            if (queue.at(leftChild).getFCost() > queue.at(rightChild).getFCost()) {
                 smallestChild = rightChild;
             }
-        } else if (leftChild < queue.size()) {
-            // Left child only
-            smallestChild = leftChild;
-        } else {
-            // No children
-        }
-
-        // Check how many children there are
-        if (smallestChild == -1) {
-            // No children to swap with, break loop
-            break;
         }
 
         // Check for swap
@@ -56,6 +42,7 @@ State<T> frontier_queue<T>::pop() {
             State<T> temp = queue.at(parent);
             queue[parent] = queue.at(smallestChild);
             queue[smallestChild] = temp;
+
             // Update parent for next loop
             parent = smallestChild;
         } else {
@@ -78,19 +65,20 @@ void frontier_queue<T>::push(const T &p, std::size_t cost, std::size_t heur) {
 
     // Move item forward if path cost is less
     std::size_t index = queue.size() - 1;
-    std::size_t parent = (index - 1) / 2;
+    std::size_t parent;
 
-    while ((parent >= 0) && (index > 0)) {
+    while (index > 0) {
+        // Find parent
+        parent = (index - 1) / 2;
+
         // Check if parent object is of larger cost
-        if (queue.at(parent).getFCost() > queue.at(index).getFCost()) {
+        if (queue.at(parent).getFCost() >= queue.at(index).getFCost()) {
             // Swap parent and child
-            State<T> temp = queue.at(parent);
-            queue[parent] = queue.at(index);
-            queue[index] = temp;
+            queue[index] = queue.at(parent);
+            queue[parent] = item;
 
             // Increment variables for next loop
             index = parent;
-            parent = (index - 1) / 2;
         } else {
             // Element in place, break loop
             break;
