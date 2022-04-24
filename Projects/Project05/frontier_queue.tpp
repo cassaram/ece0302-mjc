@@ -23,7 +23,7 @@ State<T> frontier_queue<T>::pop() {
     std::size_t leftChild;
     std::size_t rightChild;
 
-    while ((leftChild < queue.size()) && (parent < queue.size())) {
+    while (leftChild < queue.size()) {
         // Get child nodes
         leftChild = (2 * parent) + 1;
         rightChild = leftChild + 1;
