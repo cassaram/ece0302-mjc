@@ -135,7 +135,7 @@ void frontier_queue<T>::replaceif(const T &p, std::size_t cost) {
     // Check if cost is lower
     if (cost < queue.at(index).getPathCost()) {
         // Update path cost
-        queue.at(index).updatePathCost(cost)
+        queue.at(index).updatePathCost(cost);
     }
 }
 
