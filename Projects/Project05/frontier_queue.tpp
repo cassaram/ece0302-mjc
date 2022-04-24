@@ -7,7 +7,7 @@ State<T> frontier_queue<T>::pop() {
     // Ensure queue has an item
     if (queue.size() == 0) {
         // Return empty state
-        return State<T>();
+        return State<T>;
     }
 
     // Get item to return
