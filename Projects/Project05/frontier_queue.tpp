@@ -5,7 +5,7 @@
 template <typename T>
 State<T> frontier_queue<T>::pop() {
     // Ensure queue has an item
-    if (queue.size() == 0) {
+    if (empty()) {
         // Return empty state
         return State<T>(T(), 0, 0);
     }
@@ -79,7 +79,7 @@ void frontier_queue<T>::push(const T &p, std::size_t cost, std::size_t heur) {
     std::size_t index = queue.size() - 1;
     std::size_t parent = (index - 1) / 2;
 
-    while (parent >= 0) {
+    while ((parent >= 0) && (index > 0)) {
         // Check if parent object is of larger cost
         if (queue.at(parent).getFCost() > queue.at(index).getFCost()) {
             // Swap parent and child
@@ -99,7 +99,7 @@ void frontier_queue<T>::push(const T &p, std::size_t cost, std::size_t heur) {
 
 template <typename T>
 bool frontier_queue<T>::empty() {
-    return (queue.size() == 0);
+    return queue.empty();
 }
 
 template <typename T>
