@@ -15,15 +15,19 @@ State<T> frontier_queue<T>::pop() {
 
     // Remove item from queue
     // Move last item to front and delete last item
-    queue[0] = queue.back();
+    queue[0] = queue.at(queue.size() - 1);
     queue.pop_back();
 
     // Swap item with largest child as much as possible
     std::size_t parent = 0;
-    std::size_t leftChild = (2 * parent) + 1;
-    std::size_t rightChild = leftChild + 1;
+    std::size_t leftChild;
+    std::size_t rightChild;
 
     while ((leftChild < queue.size()) && (parent < queue.size())) {
+        // Get child nodes
+        leftChild = (2 * parent) + 1;
+        rightChild = leftChild + 1;
+
         // Find smallest child
         std::size_t smallestChild = -1;
         if ((leftChild < queue.size()) && (rightChild < queue.size())) {
@@ -54,9 +58,6 @@ State<T> frontier_queue<T>::pop() {
             queue[smallestChild] = temp;
             // Update parent for next loop
             parent = smallestChild;
-            // Update children for next loop
-            std::size_t leftChild = (2 * parent) + 1;
-            std::size_t rightChild = leftChild + 1;
         } else {
             // No swap needed, all elements in place, break loop
             break;
