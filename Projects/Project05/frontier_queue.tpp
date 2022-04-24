@@ -72,7 +72,7 @@ void frontier_queue<T>::push(const T &p, std::size_t cost, std::size_t heur) {
         parent = (index - 1) / 2;
 
         // Check if parent object is of larger cost
-        if (queue.at(parent).getFCost() >= queue.at(index).getFCost()) {
+        if (queue.at(parent).getFCost() > queue.at(index).getFCost()) {
             // Swap parent and child
             queue[index] = queue.at(parent);
             queue[parent] = item;
